@@ -9,11 +9,6 @@ export default function Login(){
     const [user, setUser] = useState("")
     const [contra, setContra] =useState("")
     
-    function loguear(){
-        console.log("Peron x Milei")
-        router.replace("../mesas")
-    }
-    
     function mover(){
         router.push("../registro")
     }
@@ -27,6 +22,40 @@ export default function Login(){
         setContra(event.target.value)
         console.log(contra)
     }
+
+    function loguear(datos){
+        if (user != "" && contra != ""){
+            fetch("http://localhost:4000/login",
+            {
+                method:"POST", 
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(response => response.json())
+            .then(result =>{
+                console.log(result)
+                if (result.validar == true){
+                    console.log(result.log[0])
+                    localStorage.setItem("loguedUser", result.log[0])
+                    router.replace("../mesas")
+                } else {
+                    return alert("La Cagaste")
+                }}
+            )
+        }
+    }
+
+    function loguea() {
+    if(user == undefined || contra == undefined){
+        return alert("Error, faltan datos")
+    }
+    let datos = {
+        mail: user,
+        password: contra
+    }
+    loguear(datos)}
 
     return(
         <>
@@ -47,7 +76,7 @@ export default function Login(){
                 value2={contra}
 
                 classNameB="Button"
-                onClick={loguear}
+                onClick={loguea}
                 text="Inicar Sesión"
             ></Form>
             <br></br>

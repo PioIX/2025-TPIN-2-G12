@@ -83,13 +83,18 @@ socket.on("disconnect", () => {
 app.post('/login',async function(req,res){
     try {
         console.log(req.body);
-        let vector = await realizarQuery(`SELECT * FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}"; `)
+        let vector = await realizarQuery(`SELECT * FROM Usuarios WHERE mail = "${req.body.mail}" AND contraseña = "${req.body.password}"; `)
         if(vector.length != 0){
-            let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}"; `)
-            res.send({validar:true, log:loguedUser})
+            // let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}"; `)
+            res.send({validar:true, log:`"${req.body.mail}"`})
         }
         else{
-            res.send({validar:false});
+            let verif2 = await realizarQuery(`SELECT * FROM Usuarios WHERE usuario = "${req.body.mail}" AND contraseña = "${req.body.password}"; `)
+            if(verif2.length != 0){
+                res.send({validar:true, log:`"${req.body.mail}"`})
+            } else {
+                res.send({validar:false});
+            } 
         }
     } catch (error) {
         res.send({validar:false})
@@ -100,13 +105,13 @@ app.post('/login',async function(req,res){
 app.post('/registro',async function(req,res){
     try {
         console.log(req.body);
-        let vector = await realizarQuery(`SELECT * FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}" `)
+        let vector = await realizarQuery(`SELECT * FROM Usuarios WHERE mail = "${req.body.mail}" AND usuario = "${req.body.user}" AND contraseña = "${req.body.password}" `)
         console.log(vector.length)
         if(vector.length == 0){
-            await realizarQuery(`INSERT INTO Usuarios (Mail,Contra) VALUES ("${req.body.mail}", "${req.body.password}");`);
-            let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}" `)
-            console.log(loguedUser)
-            res.send({validar:true, log:loguedUser});
+            await realizarQuery(`INSERT INTO Usuarios (mail, usuario, contraseña) VALUES ("${req.body.mail}", "${req.body.user}" , "${req.body.password}");`);
+            /* let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}" `)
+            console.log(loguedUser) */
+            res.send({validar:true, log:`"${req.body.mail}"`});
         }
         else{
             res.send({validar:false});
