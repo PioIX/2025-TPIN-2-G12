@@ -56,7 +56,7 @@ export default function Login(){
                 <br></br>
                 <br></br>
                 <Button
-                    className="NoCuenta"
+                    className={styles.NoCuenta}
                     onClick={mover}
                     text="No Tengo Cuenta"
                 ></Button>

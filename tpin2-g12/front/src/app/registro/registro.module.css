@@ -19,7 +19,7 @@
     padding: 10px;
     padding-top: 20px;
     padding-bottom: 30px;
-    transform: translate(115%, 40%);
+    transform: translate(115%, 30%);
     font-family: lexend;
 }
 
@@ -70,7 +70,7 @@
     color: white;
 }
 
-.NoCuenta {
+.YaCuenta {
     margin-top: -5%;
     height: 40px;
     border-radius: 20px;
@@ -85,14 +85,14 @@
     transition-duration: 0.2S;
 }
 
-.NoCuenta:hover {
+.YaCuenta:hover {
     background-color: #272e47;
     color: #a99ae3;
     width: 18vw;
     margin-left: 18%;
 }
 
-.NoCuenta:active {
+.YaCuenta:active {
     border: solid white;
     color: white;
 }
