@@ -33,8 +33,21 @@ export default function UNO(){
 };
 
   function repartija(){
-    for(let i = 0; i<7; i++){
-      console.log(getRandomInt(100))
+    for(let i = 0; i<28; i++){
+      let random = getRandomInt(cartas.length+1)
+      if (manoJugador1.length < 8){
+        manoJugador1.push(cartas[random])
+        cartas.splice(random , 1)
+        console.log(manoJugador1)
+      } else if (manoJugador2 < 8){
+        manoJugador2.push(cartas[random])
+        cartas.splice(random , 1)
+        console.log(manoJugador2)
+      } else if(manoJugador3 < 8){
+        manoJugador3.push(cartas[random])
+        cartas.splice(random , 1)
+        console.log(manoJugador3)
+      }else {console.log("Trump o Peron")}
     }
   };
 
