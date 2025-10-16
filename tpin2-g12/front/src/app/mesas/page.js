@@ -27,7 +27,9 @@ export default function Mesas(){
     return(
         <>
           <Button
+            className={styles.Crear}
             onClick={moverC}
+            text={"Crear Mesa"}
           ></Button>
             {estadoMesa.length != 0 && estadoMesa.map((estadoM)=>{
             console.log("Estado: ",estadoM)
