@@ -12,6 +12,7 @@ export default function admin() {
                     contentH2="Admin"
                     classNameH4={styles.H4}
                     contentPrimerH4="Modificar usuario"
+                    classNameI={styles.Input}
                 ></FormA>
             </div>   
         </>
