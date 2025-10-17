@@ -10,13 +10,18 @@ export default function UNO(){
   //const {isConnected, socket} = useSocket();
   const [cartas, setCartas] = useState([]);
   const [mano, setMano] = useState([]);
-  const [ready, setReady] = useState(0)
+  const [ready, setReady] = useState(0);
+  const [cartaActual, setCartaActual] = useState("");
+  const [cartaPrevia, setCartaPrevia] = useState("");
+  const [turnos, setTurnos] = useState([]);
+  const [x, setX] = useState(0)
   //const Ready = localStorage.getItem("Ready")
+  //const mailUser = localStorage.getItem("mailUser")
 
   useEffect(()=>{
     if(ready == 10000000 /*limite*/){
       repartija()
-    }
+    } 
   }, [ready]);
 
  /*useEffect(()=>{
@@ -24,8 +29,10 @@ export default function UNO(){
         socket.on("connect", ()=>{
             //corre una vez al conectar el socket con el back
             socket.emit("joinRoom", {room: `chat ${codigoMesa}`})
-            setReady(Ready+1)
-            //localStorage.setItem("Ready", ready)
+            setReady(ready+1)
+            socket.emit("Ready", ready)
+            turnos.push(idActual)
+            socket.emit("Orden Turnos", turnos)
           })
   }, [])*/
 
