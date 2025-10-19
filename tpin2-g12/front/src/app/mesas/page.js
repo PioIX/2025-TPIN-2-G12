@@ -1,5 +1,6 @@
 "use client"
 
+import Button from "@/components/Button"
 import Mesa from "@/components/Mesa"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -19,8 +20,17 @@ export default function Mesas(){
         router.push("../blackjack")
     }
 
+    function moverC(){
+        router.push("../laboratorio")
+    }
+
     return(
         <>
+          <Button
+            className={styles.Crear}
+            onClick={moverC}
+            text={"Crear Mesa"}
+          ></Button>
             {estadoMesa.length != 0 && estadoMesa.map((estadoM)=>{
             console.log("Estado: ",estadoM)
             if(estadoM.estado == "Deshabiltado"){
