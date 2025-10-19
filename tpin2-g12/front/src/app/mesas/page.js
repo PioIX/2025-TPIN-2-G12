@@ -4,6 +4,7 @@ import Button from "@/components/Button"
 import Mesa from "@/components/Mesa"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import styles from "@/app/mesas/mesas.module.css"
 
 
 export default function Mesas(){

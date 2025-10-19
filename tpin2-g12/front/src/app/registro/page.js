@@ -3,6 +3,7 @@ import FormR from "@/components/FormR"
 import Button from "@/components/Button"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
+import styles from "@/app/registro/registro.module.css"
 
 export default function Login(){
     const router = useRouter()
@@ -11,7 +12,7 @@ export default function Login(){
     const [contra, setContra] =useState("")
     
     function mover(){
-        router.push("../registro")
+        router.push("../login")
     }
 
     function corrobao1(event){
@@ -65,37 +66,38 @@ export default function Login(){
 
     return(
         <>
-            <FormR
-                classNameH2="H2"
-                contentH2=""
-                
-                classNameH4="H4"
-                contentPrimerH4="Usuario"
-                contentSegundoH4="Mail"
-                contentTercerH4="Contraseña"
-                
-                classNameI="Input"
-                type1="text"
-                onChange1={corrobao1}
-                value1={user}
-                type2="text"
-                onChange2={corrobao2}
-                value2={mail}
-                type3="password"
-                onChange3={corrobao3}
-                value={contra}
-
-                classNameB="Button"
-                onClick={registra}
-                text="Crear Cuenta"
-            ></FormR>
-            <br></br>
-            <br></br>
-            <Button
-                className="YaCuenta"
-                onClick={mover}
-                text="No Tengo Cuenta"
-            ></Button>
+            <div className={styles.Div}>
+                <FormR
+                    classNameH2={styles.H2}
+                    contentH2="Registro"
+                    
+                    classNameH4={styles.H4}
+                    contentPrimerH4="Usuario"
+                    contentSegundoH4="Mail"
+                    contentTercerH4="Contraseña"
+                    
+                    classNameI={styles.Input}
+                    type1="text"
+                    onChange1={corrobao1}
+                    value1={user}
+                    type2="text"
+                    onChange2={corrobao2}
+                    value2={mail}
+                    type3="password"
+                    onChange3={corrobao3}
+                    value={contra}
+                    classNameB={styles.Button}
+                    onClick={registrar}
+                    text="Crear Cuenta"
+                ></FormR>
+                <br></br>
+                <br></br>
+                <Button
+                    className={styles.YaCuenta}
+                    onClick={mover}
+                    text="Ya tengo cuenta"
+                ></Button>
+            </div>
         </>
     )
 }

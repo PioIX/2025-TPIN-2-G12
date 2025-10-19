@@ -1,11 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+.lexend {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+
 :root {
-  --background: #ffffff;
+  --background: #605f8f;
   --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #605f8f;
     --foreground: #ededed;
   }
 }
@@ -13,7 +22,7 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  /*overflow-x: hidden;*/
 }
 
 body {
