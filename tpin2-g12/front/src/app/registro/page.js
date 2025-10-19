@@ -11,11 +11,6 @@ export default function Login(){
     const [mail, setMail] = useState("")
     const [contra, setContra] =useState("")
     
-    function registrar(){
-        console.log("Peron x Milei")
-        router.replace("../mesas")
-    }
-    
     function mover(){
         router.push("../login")
     }
@@ -34,6 +29,40 @@ export default function Login(){
         setContra(event.target.value)
         console.log(contra)
     }
+
+    function registrar(datos){
+        if (mail != "" && user != "" && contra != ""){
+            fetch("http://localhost:4000/registro",{
+                method:"POST", 
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(response => response.json())
+            .then(result =>{
+                console.log(result)
+                if (result.validar == true){
+                    console.log(result.log[0])
+                    localStorage.setItem("loguedUser", result.log[0])
+                    router.replace("../mesas")
+                } else {
+                    return alert("La Cagaste")
+                }
+            })
+        }
+    }
+
+    function registra() {
+    if(mail == undefined || user == undefined || contra == undefined){
+        return alert("Error", "Faltan datos")
+    }
+    let datos = {
+        mail: mail,
+        user: user,
+        password: contra
+    }
+    registrar(datos)}
 
     return(
         <>
@@ -57,7 +86,6 @@ export default function Login(){
                     type3="password"
                     onChange3={corrobao3}
                     value={contra}
-
                     classNameB={styles.Button}
                     onClick={registrar}
                     text="Crear Cuenta"
