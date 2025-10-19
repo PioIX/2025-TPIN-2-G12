@@ -121,3 +121,63 @@ app.post('/registro',async function(req,res){
         res.send({validar:false})
     }
 })
+
+// Admin
+
+app.put('/cMail', async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Players WHERE mail = "${req.body.id}"`)
+        console.log(vector.length)
+        if(vector.length == 0){
+            await realizarQuery(`UPDATE Players SET mail = "${req.body.cambio}" WHERE mail = ${req.body.id}`);
+            res.send({validar:true})
+        } else {
+            res.send({validar:false, fallo:"mail ya existente"})
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+app.put('/cUser', async function(req,res){
+    try {
+        console.log(req.body);
+        await realizarQuery(`UPDATE Players SET usuario = "${req.body.cambio}" WHERE mail = ${req.body.id}`);
+        res.send({validar:true})
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+app.put('/cContra', async function(req,res){
+    try {
+        console.log(req.body);
+        await realizarQuery(`UPDATE Players SET contraseña = "${req.body.cambio}" WHERE mail = ${req.body.id}`);
+        res.send({validar:true})
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+app.delete('/dPlayer', async function(req,res){
+    try {
+        console.log(req.body);
+        await realizarQuery(`DELETE FROM Players WHERE ID = ${req.body.id}`);
+        res.send({validar:true})
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+// Mesas
+
+app.post('/traeMesas', async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Mesas`);
+        res.send({validar:true}, {mesazas:vector})
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
