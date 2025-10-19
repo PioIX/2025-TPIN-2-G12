@@ -78,7 +78,7 @@ export default function Login(){
                     onChange2={corrobao2}
                     value2={contra}
                     classNameB={styles.Button}
-                    onClick={loguear}
+                    onClick={loguea}
                     text="Inicar Sesión"
                 ></Form>
                 <br></br>
