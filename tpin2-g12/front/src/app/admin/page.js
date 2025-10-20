@@ -12,14 +12,19 @@ export default function admin() {
                 <FormA
                     classNameD={styles.Desplegable}
                     classNameH2={styles.H2}
-                    contentH2="Admin"
+                    contentH2="Modificar datos"
                     classNameH4={styles.H4}
-                    contentPrimerH4="Mail del usuario a cambiar"
+                    contentPrimerH4="Id a cambiar"
                     classNameI={styles.Input}
                     type1="text"
-                    contentSegundoH4="Usuario nuevo"
+                    contentSegundoH4="Dato nuevo"
+                    type2="text"
                     classNameB={styles.Button}
                     text1="Actualizar"
+                    contentSegundoH2="Eliminar usuario"
+                    contentTercerH4="Mail a eliminar"
+                    type3="text"
+                    text2="Eliminar usuario"
                 ></FormA>
             </div>
             <br></br>

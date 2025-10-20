@@ -7,9 +7,10 @@
     max-width: 30vw;
     color: #a99ae3;
     border-radius: 20px;
-    padding: 10px;
+    padding: 20px;
     padding-top: 20px;
-    transform: translate(115%, 40%);
+    padding-bottom: 30px;
+    transform: translate(117%, 10%);
     font-family: lexend;
 }
 
@@ -89,7 +90,6 @@
     font-family: lexend;
     font-size: 20px;
     margin-left: 20px;
-    transform: translateY(20vw);
     transition-duration: 0.2s;
 }
 

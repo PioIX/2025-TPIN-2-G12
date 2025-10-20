@@ -32,6 +32,20 @@ export default function Form(props){
                 text={props.text1}
             ></Button>
             <br></br>
+            <h2 className={props.classNameH2}>{props.contentSegundoH2}</h2>
+            <h4 className={props.classNameH4}>{props.contentTercerH4}</h4>
+            <Input
+                className={props.classNameI}
+                type={props.type3}
+                onChange={props.onChange3}
+                value={props.value3}
+            ></Input>
+            <br></br>
+            <Button
+                className={props.classNameB}
+                onClick={props.onClick}
+                text={props.text2}
+            ></Button>
         </>
     )
 }
