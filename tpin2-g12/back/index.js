@@ -83,13 +83,13 @@ socket.on("disconnect", () => {
 app.post('/login',async function(req,res){
     try {
         console.log(req.body);
-        let vector = await realizarQuery(`SELECT * FROM Usuarios WHERE mail = "${req.body.mail}" AND contraseña = "${req.body.password}"; `)
+        let vector = await realizarQuery(`SELECT * FROM Players WHERE mail = "${req.body.mail}" AND contraseña = "${req.body.password}"; `)
         if(vector.length != 0){
-            // let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}"; `)
+            // let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Players WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}"; `)
             res.send({validar:true, log:`"${req.body.mail}"`})
         }
         else{
-            let verif2 = await realizarQuery(`SELECT * FROM Usuarios WHERE usuario = "${req.body.mail}" AND contraseña = "${req.body.password}"; `)
+            let verif2 = await realizarQuery(`SELECT * FROM Players WHERE usuario = "${req.body.mail}" AND contraseña = "${req.body.password}"; `)
             if(verif2.length != 0){
                 res.send({validar:true, log:`"${req.body.mail}"`})
             } else {
@@ -105,11 +105,11 @@ app.post('/login',async function(req,res){
 app.post('/registro',async function(req,res){
     try {
         console.log(req.body);
-        let vector = await realizarQuery(`SELECT * FROM Usuarios WHERE mail = "${req.body.mail}" AND usuario = "${req.body.user}" AND contraseña = "${req.body.password}" `)
+        let vector = await realizarQuery(`SELECT * FROM Players WHERE mail = "${req.body.mail}" AND usuario = "${req.body.user}" AND contraseña = "${req.body.password}" `)
         console.log(vector.length)
         if(vector.length == 0){
-            await realizarQuery(`INSERT INTO Usuarios (mail, usuario, contraseña) VALUES ("${req.body.mail}", "${req.body.user}" , "${req.body.password}");`);
-            /* let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}" `)
+            await realizarQuery(`INSERT INTO Players (mail, usuario, contraseña) VALUES ("${req.body.mail}", "${req.body.user}" , "${req.body.password}");`);
+            /* let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Players WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}" `)
             console.log(loguedUser) */
             res.send({validar:true, log:`"${req.body.mail}"`});
         }
@@ -118,6 +118,66 @@ app.post('/registro',async function(req,res){
         }
     } catch (error) {
         console.log(error)
+        res.send({validar:false})
+    }
+})
+
+// Admin
+
+app.put('/cMail', async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Players WHERE mail = "${req.body.id}"`)
+        console.log(vector.length)
+        if(vector.length == 0){
+            await realizarQuery(`UPDATE Players SET mail = "${req.body.cambio}" WHERE mail = ${req.body.id}`);
+            res.send({validar:true})
+        } else {
+            res.send({validar:false, fallo:"mail ya existente"})
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+app.put('/cUser', async function(req,res){
+    try {
+        console.log(req.body);
+        await realizarQuery(`UPDATE Players SET usuario = "${req.body.cambio}" WHERE mail = ${req.body.id}`);
+        res.send({validar:true})
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+app.put('/cContra', async function(req,res){
+    try {
+        console.log(req.body);
+        await realizarQuery(`UPDATE Players SET contraseña = "${req.body.cambio}" WHERE mail = ${req.body.id}`);
+        res.send({validar:true})
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+app.delete('/dPlayer', async function(req,res){
+    try {
+        console.log(req.body);
+        await realizarQuery(`DELETE FROM Players WHERE ID = ${req.body.id}`);
+        res.send({validar:true})
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+// Mesas
+
+app.post('/traeMesas', async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Mesas`);
+        res.send({validar:true}, {mesazas:vector})
+    } catch (error) {
         res.send({validar:false})
     }
 })
