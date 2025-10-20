@@ -8,21 +8,16 @@ export default function Form(props){
     return(
         <>
             <h2 className={props.classNameH2}>{props.contentH2}</h2>
+            <Desplegable
+                className={props.classNameD}
+            ></Desplegable>
             <h4 className={props.classNameH4}>{props.contentPrimerH4}</h4>
-            <Desplegable></Desplegable>
             <Input
                 className={props.classNameI}
                 type={props.type1}
                 onChange={props.onChange1}
                 value={props.value1}
             ></Input>
-            <br></br>
-            <Button
-                className={props.classNameB}
-                onClick={props.onClick}
-                text={props.text}
-            ></Button>
-            <br></br>
             <h4 className={props.classNameH4}>{props.contentSegundoH4}</h4>
             <Input
                 className={props.classNameI}
@@ -33,9 +28,10 @@ export default function Form(props){
             <br></br>
             <Button
                 className={props.classNameB}
-                onClick={props.onClick2}
-                text={props.text2}
+                onClick={props.onClick}
+                text={props.text1}
             ></Button>
+            <br></br>
         </>
     )
 }
