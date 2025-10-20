@@ -4,13 +4,13 @@
     flex-direction: column;
     text-align: center;
     gap: 15px;
-    max-width: 30vw;
+    max-width: 50vw;
     color: #a99ae3;
     border-radius: 20px;
     padding: 20px;
     padding-top: 20px;
     padding-bottom: 30px;
-    transform: translate(117%, 10%);
+    transform: translate(50%, 5%);
     font-family: lexend;
 }
 
@@ -52,7 +52,7 @@
     border-radius: 20px;
     max-width: 18vw;
     width: 15vw;
-    margin-left: 23%;
+    margin-left: 34.5%;
     font-size: 20px;
     font-family: lexend;
     background-color: #a99ae3;
@@ -65,7 +65,7 @@
     background-color: #272e47;
     color: #a99ae3;
     width: 18vw;
-    margin-left: 18%;
+    margin-left: 31.5%;
 }
 
 .Button:active {
@@ -91,6 +91,7 @@
     font-size: 20px;
     margin-left: 20px;
     transition-duration: 0.2s;
+    transform: translateY(-2vw);
 }
 
 .Cs:hover {

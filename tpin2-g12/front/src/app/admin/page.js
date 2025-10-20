@@ -24,11 +24,14 @@ export default function admin() {
         <>
             <div className={styles.Div}>
                 <FormA
+                    Op1="Modificar mail"
+                    Op2="Modificar usuario"
+                    Op3="Modificar contraseña"
                     classNameD={styles.Desplegable}
                     classNameH2={styles.H2}
                     contentH2="Modificar datos"
                     classNameH4={styles.H4}
-                    contentPrimerH4="Id a cambiar"
+                    contentPrimerH4="Mail del usuario a modificar"
                     classNameI={styles.Input}
                     type1="text"
                     contentSegundoH4="Dato nuevo"
@@ -36,9 +39,15 @@ export default function admin() {
                     classNameB={styles.Button}
                     text1="Actualizar"
                     contentSegundoH2="Eliminar usuario"
-                    contentTercerH4="Mail a eliminar"
+                    contentTercerH4="Usuario a eliminar"
                     type3="text"
                     text2="Eliminar usuario"
+                    contentTercerH2="Modificar mesa"
+                    contentCuartoH4="Id de mesa a modificar"
+                    contentQuintoH4="Status de mesa"
+                    Op4="Deshabilitado"
+                    Op5="Uno"
+                    Op6="Blackjack"
                 ></FormA>
             </div>
             <br></br>
