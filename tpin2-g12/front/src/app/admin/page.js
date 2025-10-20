@@ -4,8 +4,22 @@ import styles from "@/app/admin/admin.module.css"
 import Button from "@/components/Button"
 import Desplegable from "@/components/Desplegable"
 import FormA from "@/components/FormA"
+import { useState, useEffect } from "react"
 
 export default function admin() {
+    const [user, setUser] = useState("")
+    const [contra, setContra] = useState("")
+    
+
+    function corrobao1(event){
+        setUser(event.target.value)
+        console.log(user)
+    }
+
+    function corrobao2(event){
+        setContra(event.target.value)
+        console.log(contra)
+    }
     return(
         <>
             <div className={styles.Div}>

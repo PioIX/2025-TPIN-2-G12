@@ -3,7 +3,7 @@
 import Button from "@/components/Button"
 import Mesa from "@/components/Mesa"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styles from "@/app/mesas/mesas.module.css"
 
 
@@ -24,6 +24,30 @@ export default function Mesas(){
     function moverC(){
         router.push("../laboratorio")
     }
+
+    function traerMesas(){
+      fetch("http://localhost:4000/traeMesas",
+          {
+              method:"POST", 
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify(datos)
+          })
+      .then(response => response.json())
+      .then(result =>{
+        console.log(result)
+        if (result.validar == true){
+            setEstadoMesa(result.mesazas)
+        } else {
+            return alert("La Cagaste")
+        }}
+      )
+    }
+
+    useEffect(()=>{
+      traerMesas()
+  }, []);
 
     return(
         <>

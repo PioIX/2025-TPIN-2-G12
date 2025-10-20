@@ -87,7 +87,7 @@ export default function Login(){
                     onChange3={corrobao3}
                     value={contra}
                     classNameB={styles.Button}
-                    onClick={registrar}
+                    onClick={registra}
                     text="Crear Cuenta"
                 ></FormR>
                 <br></br>
