@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
     socket.leave(req.session.room);
     req.session.room = data.room;
     socket.join(req.session.room);
-    io.to(req.session.room).emit('chat-messages', { user: req.session.user, room: req.session.room });
+    io.to(req.session.room).emit('joinedRoom', { user: req.session.user, room: req.session.room });
 });
 
 socket.on('pingAll', data => {
