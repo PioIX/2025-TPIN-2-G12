@@ -8,21 +8,19 @@ export default function Form(props){
     return(
         <>
             <h2 className={props.classNameH2}>{props.contentH2}</h2>
+            <Desplegable
+                className={props.classNameD}
+                op1={props.Op1}
+                op2={props.Op2}
+                op3={props.Op3}
+            ></Desplegable>
             <h4 className={props.classNameH4}>{props.contentPrimerH4}</h4>
-            <Desplegable></Desplegable>
             <Input
                 className={props.classNameI}
                 type={props.type1}
                 onChange={props.onChange1}
                 value={props.value1}
             ></Input>
-            <br></br>
-            <Button
-                className={props.classNameB}
-                onClick={props.onClick}
-                text={props.text}
-            ></Button>
-            <br></br>
             <h4 className={props.classNameH4}>{props.contentSegundoH4}</h4>
             <Input
                 className={props.classNameI}
@@ -33,9 +31,40 @@ export default function Form(props){
             <br></br>
             <Button
                 className={props.classNameB}
-                onClick={props.onClick2}
+                onClick={props.onClick}
+                text={props.text1}
+            ></Button>
+            <br></br>
+            <h2 className={props.classNameH2}>{props.contentSegundoH2}</h2>
+            <h4 className={props.classNameH4}>{props.contentTercerH4}</h4>
+            <Input
+                className={props.classNameI}
+                type={props.type3}
+                onChange={props.onChange3}
+                value={props.value3}
+            ></Input>
+            <br></br>
+            <Button
+                className={props.classNameB}
+                onClick={props.onClick}
                 text={props.text2}
             ></Button>
+            <br></br>
+            <h2 className={props.classNameH2}>{props.contentTercerH2}</h2>
+            <h4 className={props.classNameH4}>{props.contentCuartoH4}</h4>
+            <Input
+                className={props.classNameI}
+                type={props.type4}
+                onChange={props.onChange4}
+                value={props.value4}
+            ></Input>
+            <h4 className={props.classNameH4}>{props.contentQuintoH4}</h4>
+            <Desplegable
+                className={props.classNameD}
+                op1={props.Op4}
+                op2={props.Op5}
+                op3={props.Op6}
+            ></Desplegable>
         </>
     )
 }

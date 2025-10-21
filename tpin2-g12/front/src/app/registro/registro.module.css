@@ -34,6 +34,11 @@
     padding: 5px;
     font-family: lexend;
     color: #272e47;
+    transition-duration: 0.2s;
+}
+
+.Input:hover {
+    border: solid aliceblue;
 }
 
 .H4 {

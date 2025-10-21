@@ -1,0 +1,107 @@
+.Div {
+    background-color: #272e47;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+    max-width: 50vw;
+    color: #a99ae3;
+    border-radius: 20px;
+    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    transform: translate(50%, 5%);
+    font-family: lexend;
+}
+
+.Input {
+    height: 2vw;
+    border-radius: 20px;
+    background-color: #a99ae3;
+    border: solid #a99ae3;
+    margin-right: 15px;
+    margin-left: 15px;
+    font-size: 20px;
+    padding: 5px;
+    font-family: lexend;
+    color: #272e47;
+    transition-duration: 0.2s;
+}
+
+.Input:hover {
+    border: solid aliceblue;
+}
+
+.Desplegable {
+    background-color: #a99ae3;
+    font-size: 30px;
+    font-family: lexend;
+    color: #272e47;
+    border-radius: 20px;
+    text-align: center;
+    border: solid #a99ae3;
+    transition-duration: 0.2s;
+}
+
+.Desplegable:hover {
+    border: solid aliceblue;
+}
+
+.Button {
+    height: 40px;
+    border-radius: 20px;
+    max-width: 18vw;
+    width: 15vw;
+    margin-left: 34.5%;
+    font-size: 20px;
+    font-family: lexend;
+    background-color: #a99ae3;
+    color: #272e47;
+    border: solid #a99ae3;
+    transition-duration: 0.2S;
+}
+
+.Button:hover {
+    background-color: #272e47;
+    color: #a99ae3;
+    width: 18vw;
+    margin-left: 31.5%;
+}
+
+.Button:active {
+    border: solid white;
+    color: white;
+}
+
+.H4 {
+    font-size: 20px;
+}
+
+.H2 {
+    font-size: 30px;
+}
+
+.Cs {
+    width: 10vw;
+    background-color: #ff3131;
+    border: solid #791818;
+    padding: 10px;
+    border-radius: 20px;
+    font-family: lexend;
+    font-size: 20px;
+    margin-left: 20px;
+    transition-duration: 0.2s;
+    transform: translateY(-2vw);
+}
+
+.Cs:hover {
+    margin-left: 14px;
+    background-color: white;
+    color: #ff3131;
+    width: 11vw;
+}
+
+.Cs:active {
+    border: solid #ff3131;
+    color: #ff3131;
+}
