@@ -78,6 +78,18 @@ socket.on("disconnect", () => {
     });
 });
 
+socket.on("selectCartas", (data) => {
+    socket.emit("enviar_cartas", { cartasRestantes: data});
+});
+
+socket.on("jugadorAnterior", (data) => {
+    socket.emit("jugadorActual", { mailJugado: data});
+});
+
+socket.on("ordenTurnos", (data) => {
+    socket.emit("turnos", {turnos: data});
+});
+
 // A PARTIR DE ACÁ LOS PEDIDOS HTTP (GET, POST, PUT, DELETE)
 
 app.post('/login',async function(req,res){

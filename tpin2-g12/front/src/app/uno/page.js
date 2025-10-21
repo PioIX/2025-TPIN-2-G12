@@ -7,20 +7,24 @@ import { useSocket } from "@/hooks/useSocket";
 import { useEffect, useState } from "react";
 
 export default function UNO() {
-  //const {isConnected, socket} = useSocket();
+  const {isConnected, socket} = useSocket();
   const [cartas, setCartas] = useState([]);
   const [mano, setMano] = useState([]);
   const [ready, setReady] = useState(0);
   const [cartaActual, setCartaActual] = useState("");
   const [cartaPrevia, setCartaPrevia] = useState("");
   const [turnos, setTurnos] = useState([]);
-  const {socket} = useSocket();
   const [mailPrevio, setMailPrevio] = useState("")
-  //const Ready = localStorage.getItem("Ready")
-  //const mailUser = localStorage.getItem("mailUser")
+  const mailUser = localStorage.getItem("mailUser")
+  const searchParams = useSearchParams();
+  const limite = searchParams.get("limite");
+
+  socket.on('jugadorAnterior', (data) => {
+    setMailPrevio(data);
+  });
 
   useEffect(() => {
-    if (ready == 6 /*limite*/) {
+    if (ready == limite) {
       repartija()
     }
   }, [ready]);
@@ -34,22 +38,19 @@ export default function UNO() {
       setReady(ready + 1)
       socket.emit("Ready", ready)
       
-      //turnos.push(mailUser)
-      //socket.emit("Orden Turnos", {turnos: turnos , mailJugado: mailUser})
+      turnos.push(mailUser)
+      socket.emit("ordenTurnos", {turnos: turnos})
+      socket.emit("jugadorAnterior", {mailJugado: mailUser})
     })
   }, [])
 
   useEffect(()=> {
     if (!socket) return;
     socket.on("joinedRoom", data => {
-      if (data.mail != mailUser ) {//&& mailOwner == mailUser ) {
+      if (data.mail != mailUser && mailOwner == mailUser ) {
         turnos.push(data.mail)
       }
     })
-
-    setMailPrevio(mailJugado)
-    socket.on("seleccionarCartas", )
-
   },[socket])
 
   function Jogar() {
@@ -80,7 +81,8 @@ export default function UNO() {
           }
         }
       }
-      socket.emit("Seleccionar Cartas", cartas, { mailJugado: mailUser})
+      socket.emit("seleccionar_cartas", cartas)
+      socket.emit("jugadorAnterior", mailUser)
     }
   };
 
