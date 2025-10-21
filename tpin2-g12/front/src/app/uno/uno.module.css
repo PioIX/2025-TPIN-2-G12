@@ -1,0 +1,33 @@
+.Div {
+    background: #124828;
+    border: solid #3D1D07 10px;
+    border-radius: 50%;
+    width: 30vw;
+    height: 30vw;
+    transform: translate(115%, 15%);
+}
+
+.Boton {
+    width: 5vw;
+    background-color: #ff3131;
+    border: solid #791818;
+    padding: 10px;
+    border-radius: 20px;
+    font-family: lexend;
+    font-size: 20px;
+    margin-left: 20px;
+    transition-duration: 0.2s;
+    margin-top: 10px;
+}
+
+.Boton:hover {
+    margin-left: 14px;
+    background-color: white;
+    color: #ff3131;
+    width: 6vw;
+}
+
+.Boton:active {
+    border: solid #ff3131;
+    color: #ff3131;
+}
