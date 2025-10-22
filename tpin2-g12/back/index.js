@@ -90,6 +90,10 @@ socket.on("ordenTurnos", (data) => {
     socket.emit("turnos", {turnos: data});
 });
 
+socket.on("listo", (data) => {
+    socket.emit("ready", {turnos: data});
+});
+
 // A PARTIR DE ACÁ LOS PEDIDOS HTTP (GET, POST, PUT, DELETE)
 
 app.post('/login',async function(req,res){

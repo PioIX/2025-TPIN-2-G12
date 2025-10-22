@@ -18,10 +18,19 @@ export default function UNO() {
   const mailUser = localStorage.getItem("mailUser")
   const searchParams = useSearchParams();
   const limite = searchParams.get("limite");
+  
 
   socket.on('jugadorAnterior', (data) => {
     setMailPrevio(data);
   });
+
+    socket.on("listo", (data)=>{
+    setReady(data)
+  })
+
+    socket.on("selectCartas", (data)=>{
+    setCartas(data)
+  })
 
   useEffect(() => {
     if (ready == limite) {
@@ -36,11 +45,10 @@ export default function UNO() {
       //corre una vez al conectar el socket con el back
       socket.emit("joinRoom", { room: `chat ${codigoMesa}`, mail: mailUser })
       setReady(ready + 1)
-      socket.emit("Ready", ready)
-      
+      socket.emit("ready", ready)
       turnos.push(mailUser)
-      socket.emit("ordenTurnos", {turnos: turnos})
-      socket.emit("jugadorAnterior", {mailJugado: mailUser})
+      socket.emit("turnos", {turnos: turnos})
+      socket.emit("jugadorActual", {mailJugado: mailUser})
     })
   }, [])
 
@@ -54,7 +62,14 @@ export default function UNO() {
   },[socket])
 
   function Jogar() {
-
+    if (colorCartaActual == colorCartaJugada){
+      setCartaPrevia(cartaActual);
+      setCartaActual(carta.id);
+      if(valorCartaJugada == "Cambio"){
+        turnos.reverse();
+        socket.emit("turnos", turnos)
+      }
+    }
   };
 
   function getRandomInt(max) {
@@ -81,8 +96,8 @@ export default function UNO() {
           }
         }
       }
-      socket.emit("seleccionar_cartas", cartas)
-      socket.emit("jugadorAnterior", mailUser)
+      socket.emit("enviar_cartas", cartas)
+      socket.emit("jugadorActual", mailUser)
     }
   };
 
@@ -109,6 +124,8 @@ export default function UNO() {
     alert("quilombazo")
   }
 
+
+
   return (
     <>
       <Pachero
@@ -120,6 +137,7 @@ export default function UNO() {
       <div className="mano">
         {mano.length != 0 && mano.map((carta) => {
           <Carta
+            id={carta.id}
             onClick={Jogar}
             img={carta.link}
           ></Carta>
