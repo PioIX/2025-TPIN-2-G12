@@ -149,37 +149,7 @@ export default function admin() {
     }
     borrar(datos)}
 
-    function actualizarMesa(datos){
-        if(mesaId != "" || cambioPlayer == ""){
-            fetch("http://localhost:4000/dPlayer",
-            {
-                method:"PUT", 
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(datos)
-            })
-            .then(response => response.json())
-            .then(result =>{
-                console.log(result)
-                if (result.validar == true){
-                    return alert("Mesa actualizada, segui carteando pibe")
-                } else {
-                    return alert("La Cagaste")
-                }}
-            )
-        }
-    }
-
-    function actMesa() {
-    if(mesaId == undefined || cambioPlayer == undefined){
-        return alert("Error, faltan datos")
-    }
-    let datos = {
-        cambio: mesaState,
-        id: mesaId
-    }
-    actualizarMesa(datos)}
+    
 
     return(
         <>
