@@ -48,10 +48,10 @@ La propuesta del proyecto es un espacio virtual con mesas en las que se puedan j
 
 ### Responsabilidades:
 
-* 1. 2. 6. MV
-* 2. 9. 10. PC
-* 3. 7. 6. 5. SGF
-* 4. 5. 8. 7. GP
+* 1 2 6 MV
+* 2 9 10 PC
+* 3 7 6 5 SGF
+* 4 5 8 7 GP
 
 
 ### Diagrama Gantt
