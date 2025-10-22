@@ -191,3 +191,21 @@ app.post('/traeMesas', async function(req,res){
         res.send({validar:false})
     }
 })
+
+// Laboratorio
+
+app.post('/crearMesa',async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Mesas WHERE num_mesa = "${req.body.num_mesa}"`)
+        if(vector.length == 0){
+            await realizarQuery(`INSERT INTO Mesas (num_mesa, estado, limite_max, id_owner), VALUES ("${req.body.num_mesa}", "${req.body.estado}", ${req.body.limite_max}, "${req.body.id_owner}")`)
+            res.send({validar:true, code:`"${req.body.limite_max}"`})
+        }
+        else{
+            res.send({validar:false});
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
