@@ -1,10 +1,13 @@
 "use client";
 
 import Carta from "@/components/Carta";
+import Modal from "@/components/Modal";
 import Pachero from "@/components/Pachero";
 import Timer from "@/components/Timer";
 import { useSocket } from "@/hooks/useSocket";
 import { useEffect, useState } from "react";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 export default function UNO() {
   const {isConnected, socket} = useSocket();
@@ -14,10 +17,14 @@ export default function UNO() {
   const [cartaActual, setCartaActual] = useState("");
   const [cartaPrevia, setCartaPrevia] = useState("");
   const [turnos, setTurnos] = useState([]);
-  const [mailPrevio, setMailPrevio] = useState("")
-  const mailUser = localStorage.getItem("mailUser")
-  const searchParams = useSearchParams();
-  const limite = searchParams.get("limite");
+  const [mailPrevio, setMailPrevio] = useState("");
+  const [colorCartaActual, setColorCartaActual] = useState("");
+  const [colorCartaJugada, setColorCartaJugada] = useState("");
+  const [valorCartaJugada, setValorCartaJugada] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const mailUser = localStorage.getItem("mailUser");
+  //const searchParams = useSearchParams();
+  //const limite = searchParams.get("limite");
   
 
   socket.on('jugadorAnterior', (data) => {
@@ -68,6 +75,25 @@ export default function UNO() {
       if(valorCartaJugada == "Cambio"){
         turnos.reverse();
         socket.emit("turnos", turnos)
+      }
+      if(valorCartaJugada == "Bloqueo"){
+        let index = turnos.findIndex(x => x.concepto === mailUser)
+        if(index= 3){
+          setMailPrevio(turnos[1])
+        }else{setMailPrevio(turnos[index+1])}
+        socket.emit("jugadorActual", mailPrevio)
+      }
+      if(valorCartaJugada == "+2"){
+        turnos.reverse();
+      }
+      if(valorCartaJugada == "Color"){
+        setShowModal(true)
+        {showModal &&
+          <></>
+        }
+      }
+      if(valorCartaJugada == "+4"){
+        setShowModal(true)
       }
     }
   };
@@ -142,6 +168,13 @@ export default function UNO() {
             img={carta.link}
           ></Carta>
         })}
+
+        <Popup trigger={
+          <h1>HOLA</h1>
+        }>
+
+        </Popup>
+
       </div>
     </>
   );

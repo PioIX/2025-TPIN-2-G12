@@ -27,7 +27,7 @@ const server = app.listen(LISTEN_PORT, () => {
 
 const io = require('socket.io')(server, {
     cors: {
-    // IMPORTANTE: REVISAR PUERTO DEL FRONTEND
+        // IMPORTANTE: REVISAR PUERTO DEL FRONTEND
         origin: ["http://localhost:3000", "http://localhost:3001"], // Permitir el origen localhost:3000
         methods: ["GET", "POST", "PUT", "DELETE"],   // Métodos permitidos
         credentials: true                           // Habilitar el envío de cookies
@@ -52,83 +52,83 @@ io.use((socket, next) => {
 io.on("connection", (socket) => {
     const req = socket.request;
     socket.on('joinRoom', data => {
-    console.log("🚀 ~ io.on ~ req.session.room:", req.session.room)
-    if (req.session.room != undefined && req.session.room.length > 0)
-    socket.leave(req.session.room);
-    req.session.room = data.room;
-    socket.join(req.session.room);
-    io.to(req.session.room).emit('joinedRoom', { user: req.session.user, room: req.session.room });
-});
+        console.log("🚀 ~ io.on ~ req.session.room:", req.session.room)
+        if (req.session.room != undefined && req.session.room.length > 0)
+            socket.leave(req.session.room);
+        req.session.room = data.room;
+        socket.join(req.session.room);
+        io.to(req.session.room).emit('joinedRoom', { user: req.session.user, room: req.session.room });
 
-socket.on('pingAll', data => {
-    console.log("PING ALL: ", data);
-    io.emit('pingAll', { event: "Ping to all", message: data });
-});
+        socket.on('pingAll', data => {
+            console.log("PING ALL: ", data);
+            io.emit('pingAll', { event: "Ping to all", message: data });
+        });
 
 
-socket.on("sendMessage", (data) => {
-    io.to(req.session.room).emit("newMessage", {
-    room: req.session.room,
-    message: data,
+        socket.on("sendMessage", (data) => {
+            io.to(req.session.room).emit("newMessage", {
+                room: req.session.room,
+                message: data,
+            });
+        });
+
+        socket.on("disconnect", () => {
+            console.log("Disconnect");
+        });
     });
-});
 
-socket.on("disconnect", () => {
-    console.log("Disconnect");
+    socket.on("selectCartas", (data) => {
+        socket.emit("enviar_cartas", { cartasRestantes: data });
     });
-});
 
-socket.on("selectCartas", (data) => {
-    socket.emit("enviar_cartas", { cartasRestantes: data});
-});
+    socket.on("jugadorAnterior", (data) => {
+        socket.emit("jugadorActual", { mailJugado: data });
+    });
 
-socket.on("jugadorAnterior", (data) => {
-    socket.emit("jugadorActual", { mailJugado: data});
-});
+    socket.on("ordenTurnos", (data) => {
+        socket.emit("turnos", { turnos: data });
+    });
 
-socket.on("ordenTurnos", (data) => {
-    socket.emit("turnos", {turnos: data});
-});
-
-socket.on("listo", (data) => {
-    socket.emit("ready", {turnos: data});
+    socket.on("listo", (data) => {
+        socket.emit("ready", { turnos: data });
+    });
 });
 
 // A PARTIR DE ACÁ LOS PEDIDOS HTTP (GET, POST, PUT, DELETE)
 
-app.post('/login',async function(req,res){
+app.post('/login', async function (req, res) {
     try {
         console.log(req.body);
         let vector = await realizarQuery(`SELECT * FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}"; `)
-        if(vector.length != 0){
+        if (vector.length != 0) {
             let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}"; `)
-            res.send({validar:true, log:loguedUser})
+            res.send({ validar: true, log: loguedUser })
         }
-        else{
-            res.send({validar:false});
+        else {
+            res.send({ validar: false });
         }
     } catch (error) {
-        res.send({validar:false})
+        res.send({ validar: false })
     }
 })
 
 // Arreglado (x ahora)
-app.post('/registro',async function(req,res){
+app.post('/registro', async function (req, res) {
     try {
         console.log(req.body);
         let vector = await realizarQuery(`SELECT * FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}" `)
         console.log(vector.length)
-        if(vector.length == 0){
+        if (vector.length == 0) {
             await realizarQuery(`INSERT INTO Usuarios (Mail,Contra) VALUES ("${req.body.mail}", "${req.body.password}");`);
             let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Usuarios WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}" `)
             console.log(loguedUser)
-            res.send({validar:true, log:loguedUser});
+            res.send({ validar: true, log: loguedUser });
         }
-        else{
-            res.send({validar:false});
+        else {
+            res.send({ validar: false });
         }
     } catch (error) {
         console.log(error)
-        res.send({validar:false})
+        res.send({ validar: false })
     }
 })
