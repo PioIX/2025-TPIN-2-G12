@@ -225,3 +225,37 @@ app.post('/crearMesa',async function(req,res){
         res.send({validar:false})
     }
 })
+
+// UNO
+
+app.post('/traerUno',async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Cartas WHERE baraja = "UNO"`)
+        if(vector.length != 0){
+            res.send({validar:true, mazo: vector})
+        }
+        else{
+            res.send({validar:false});
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+// Blackjack
+
+app.post('/traerBJ',async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Cartas WHERE baraja = "Blackjack"`)
+        if(vector.length != 0){
+            res.send({validar:true, mazo: vector})
+        }
+        else{
+            res.send({validar:false});
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
