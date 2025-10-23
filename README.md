@@ -56,7 +56,7 @@ La propuesta del proyecto es un espacio virtual con mesas en las que se puedan j
 
 ### Diagrama Gantt
 
-A insertar
+![Diagrama de Gantt](tpin2-g12/front/public/Presupuesto/Online%20Gantt%2020251007.png)
 
 ### Primer entregable: Login y Registro (16/10):
 
