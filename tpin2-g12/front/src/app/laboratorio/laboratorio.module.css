@@ -1,0 +1,99 @@
+.Div {
+    background-color: #272e47;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+    max-width: 30vw;
+    color: #a99ae3;
+    border-radius: 20px;
+    padding: 10px;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    transform: translate(115%, 10%);
+    font-family: lexend;
+}
+
+.Input {
+    height: 2.5vw;
+    border-radius: 20px;
+    background-color: #a99ae3;
+    border: solid #a99ae3;
+    margin-right: 15px;
+    margin-left: 15px;
+    font-size: 20px;
+    padding: 5px;
+    font-family: lexend;
+    color: #272e47;
+    transition-duration: 0.2s;
+}
+
+.Input:hover {
+    border: solid aliceblue;
+}
+
+.H4 {
+    font-size: 20px;
+}
+
+.H2 {
+    font-size: 30px;
+}
+
+.Creador {
+    height: 40px;
+    border-radius: 20px;
+    max-width: 18vw;
+    width: 15vw;
+    margin-left: 23%;
+    font-size: 20px;
+    font-family: lexend;
+    background-color: #a99ae3;
+    color: #272e47;
+    border: solid #a99ae3;
+    transition-duration: 0.2S;
+}
+
+.Creador:hover {
+    background-color: #272e47;
+    color: #a99ae3;
+    width: 18vw;
+    margin-left: 18%;
+}
+
+.Creador:active {
+    border: solid white;
+    color: white;
+}
+
+
+.Boton {
+ display: flex;
+ height: 3em;
+ width: 100px;
+ align-items: center;
+ justify-content: center;
+ background-color: #ff4b4b4b;
+ border-radius: 3px;
+ letter-spacing: 1px;
+ transition: all 0.2s linear;
+ cursor: pointer;
+ border: none;
+ background: #df3d3d;
+ margin: 17px;
+ font-weight: bold;
+ font-size: 15px;
+ color: aliceblue;
+}
+
+.Boton:hover {
+ font-size: 17px;
+ transform: translateX(5px);
+ box-shadow: 9px 9px 33px #ffaaaa, -9px -9px 33px #da6060;
+ transform: translateY(-1px);
+}
+
+.Boton:active {
+    border: solid #ffffff;
+    color: #ffffff;
+}
