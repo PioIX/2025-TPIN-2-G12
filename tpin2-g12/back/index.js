@@ -130,7 +130,7 @@ app.put('/cMail', async function(req,res){
         let vector = await realizarQuery(`SELECT * FROM Players WHERE mail = "${req.body.id}"`)
         console.log(vector.length)
         if(vector.length == 0){
-            await realizarQuery(`UPDATE Players SET mail = "${req.body.cambio}" WHERE mail = ${req.body.id}`);
+            await realizarQuery(`UPDATE Players SET mail = "${req.body.cambio}" WHERE mail = "${req.body.id}"`);
             res.send({validar:true})
         } else {
             res.send({validar:false, fallo:"mail ya existente"})
@@ -143,7 +143,7 @@ app.put('/cMail', async function(req,res){
 app.put('/cUser', async function(req,res){
     try {
         console.log(req.body);
-        await realizarQuery(`UPDATE Players SET usuario = "${req.body.cambio}" WHERE mail = ${req.body.id}`);
+        await realizarQuery(`UPDATE Players SET usuario = "${req.body.cambio}" WHERE mail = "${req.body.id}"`);
         res.send({validar:true})
     } catch (error) {
         res.send({validar:false})
@@ -153,7 +153,7 @@ app.put('/cUser', async function(req,res){
 app.put('/cContra', async function(req,res){
     try {
         console.log(req.body);
-        await realizarQuery(`UPDATE Players SET contraseña = "${req.body.cambio}" WHERE mail = ${req.body.id}`);
+        await realizarQuery(`UPDATE Players SET contraseña = "${req.body.cambio}" WHERE mail = "${req.body.id}"`);
         res.send({validar:true})
     } catch (error) {
         res.send({validar:false})
@@ -163,7 +163,17 @@ app.put('/cContra', async function(req,res){
 app.delete('/dPlayer', async function(req,res){
     try {
         console.log(req.body);
-        await realizarQuery(`DELETE FROM Players WHERE ID = ${req.body.id}`);
+        await realizarQuery(`DELETE FROM Players WHERE mail = "${req.body.id}"`);
+        res.send({validar:true})
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+app.put('/actEstMesa', async function(req,res){
+    try {
+        console.log(req.body);
+        await realizarQuery(`UPDATE Mesas SET estado = "${req.body.cambio}" WHERE num_mesa = "${req.body.id}"`);
         res.send({validar:true})
     } catch (error) {
         res.send({validar:false})
@@ -177,6 +187,24 @@ app.post('/traeMesas', async function(req,res){
         console.log(req.body);
         let vector = await realizarQuery(`SELECT * FROM Mesas`);
         res.send({validar:true}, {mesazas:vector})
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+// Laboratorio
+
+app.post('/crearMesa',async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Mesas WHERE num_mesa = "${req.body.num_mesa}"`)
+        if(vector.length == 0){
+            await realizarQuery(`INSERT INTO Mesas (num_mesa, estado, limite_max, id_owner), VALUES ("${req.body.num_mesa}", "${req.body.estado}", ${req.body.limite_max}, "${req.body.id_owner}")`)
+            res.send({validar:true, code:`"${req.body.limite_max}"`})
+        }
+        else{
+            res.send({validar:false});
+        }
     } catch (error) {
         res.send({validar:false})
     }
