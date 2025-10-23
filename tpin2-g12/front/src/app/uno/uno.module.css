@@ -8,26 +8,32 @@
 }
 
 .Boton {
-    width: 5vw;
-    background-color: #ff3131;
-    border: solid #791818;
-    padding: 10px;
-    border-radius: 20px;
-    font-family: lexend;
-    font-size: 20px;
-    margin-left: 20px;
-    transition-duration: 0.2s;
-    margin-top: 10px;
+ display: flex;
+ height: 3em;
+ width: 100px;
+ align-items: center;
+ justify-content: center;
+ background-color: #ff4b4b4b;
+ border-radius: 3px;
+ letter-spacing: 1px;
+ transition: all 0.2s linear;
+ cursor: pointer;
+ border: none;
+ background: #df3d3d;
+ margin: 17px;
+ font-weight: bold;
+ font-size: 15px;
+ color: aliceblue;
 }
 
 .Boton:hover {
-    margin-left: 14px;
-    background-color: white;
-    color: #ff3131;
-    width: 6vw;
+ font-size: 17px;
+ transform: translateX(5px);
+ box-shadow: 9px 9px 33px #ffaaaa, -9px -9px 33px #da6060;
+ transform: translateY(-1px);
 }
 
 .Boton:active {
-    border: solid #ff3131;
-    color: #ff3131;
+    border: solid #ffffff;
+    color: #ffffff;
 }
