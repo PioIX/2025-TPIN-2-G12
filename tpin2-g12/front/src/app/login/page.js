@@ -3,16 +3,13 @@ import Form from "@/components/Form"
 import Button from "@/components/Button"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
+import styles from "@/app/login/login.module.css"
+
 
 export default function Login(){
     const router = useRouter()
     const [user, setUser] = useState("")
     const [contra, setContra] =useState("")
-    
-    function loguear(){
-        console.log("Peron x Milei")
-        router.replace("../mesas")
-    }
     
     function mover(){
         router.push("../registro")
@@ -28,35 +25,72 @@ export default function Login(){
         console.log(contra)
     }
 
+    function loguear(datos){
+        if(user == "admin" && contra == "admin"){
+            router.push("../admin")
+        } else if (user != "" && contra != ""){
+            fetch("http://localhost:4000/login",
+            {
+                method:"POST", 
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(response => response.json())
+            .then(result =>{
+                console.log(result)
+                if (result.validar == true){
+                    console.log(result.log[0])
+                    localStorage.setItem("loguedUser", result.log[0])
+                    router.replace("../mesas")
+                } else {
+                    return alert("La Cagaste")
+                }}
+            )
+        }
+    }
+
+    function loguea() {
+    if(user == undefined || contra == undefined){
+        return alert("Error, faltan datos")
+    }
+    let datos = {
+        mail: user,
+        password: contra
+    }
+    loguear(datos)}
+
     return(
         <>
-            <Form
-                classNameH2="H2"
-                contentH2="Iniciar Sesión"
-                
-                classNameH4="H4"
-                contentPrimerH4="Usuario o Mail"
-                contentSegundoH4="Contraseña"
-                
-                classNameI="Input"
-                type1="text"
-                onChange1={corrobao1}
-                value1={user}
-                type2="password"
-                onChange2={corrobao2}
-                value2={contra}
-
-                classNameB="Button"
-                onClick={loguear}
-                text="Inicar Sesión"
-            ></Form>
-            <br></br>
-            <br></br>
-            <Button
-                className="NoCuenta"
-                onClick={mover}
-                text="No Tengo Cuenta"
-            ></Button>
+            <div className={styles.Div}>
+                <Form
+                    classNameH2={styles.H2}
+                    contentH2="Iniciar Sesión"
+                    
+                    classNameH4={styles.H4}
+                    contentPrimerH4="Usuario o Mail"
+                    contentSegundoH4="Contraseña"
+                    
+                    classNameI={styles.Input}
+                    type1="text"
+                    onChange1={corrobao1}
+                    value1={user}
+                    type2="password"
+                    onChange2={corrobao2}
+                    value2={contra}
+                    classNameB={styles.Button}
+                    onClick={loguea}
+                    text="Inicar Sesión"
+                ></Form>
+                <br></br>
+                <br></br>
+                <Button
+                    className={styles.NoCuenta}
+                    onClick={mover}
+                    text="No Tengo Cuenta"
+                ></Button>
+            </div>
         </>
     )
 }
