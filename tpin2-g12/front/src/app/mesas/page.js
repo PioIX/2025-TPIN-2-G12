@@ -32,12 +32,13 @@ export default function Mesas(){
               headers: {
                   "Content-Type": "application/json",
               },
-              body: JSON.stringify(datos)
+              //body: JSON.stringify(datos)
           })
       .then(response => response.json())
       .then(result =>{
         console.log(result)
         if (result.validar == true){
+          console.log(result.mesazas)
             setEstadoMesa(result.mesazas)
         } else {
             return alert("La Cagaste")

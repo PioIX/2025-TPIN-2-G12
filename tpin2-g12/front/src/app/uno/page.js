@@ -8,6 +8,7 @@ import Pachero from "@/components/Pachero";
 import Timer from "@/components/Timer";
 import { useSocket } from "@/hooks/useSocket";
 import { useEffect, useState } from "react";
+import styles from "@/app/uno/uno.module.css"
 
 export default function UNO() {
   const {isConnected, socket} = useSocket();
@@ -236,7 +237,7 @@ export default function UNO() {
     }, 1000); // 1000 milisegundos = 1 segundo
 
   }
-
+  
   function cambioTurno(){
     alert("quilombazo")
   }
@@ -245,11 +246,17 @@ export default function UNO() {
 
   return (
     <>
+      <Button
+      className={styles.Boton}
+      text="<"
+      ></Button>
       <Pachero
         className={"Juan"/*styles.H2*/}
         usuario={"usuarioActual"}
         cantCartas={mano.lenght}
       ></Pachero>
+      <div className={styles.Div}>
+      </div>
       <Timer></Timer>
       <div className="mano">
         {mano.length != 0 && mano.map((carta) => {

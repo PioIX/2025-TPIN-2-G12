@@ -1,0 +1,39 @@
+.Div {
+    background: #124828;
+    border: solid #3D1D07 10px;
+    border-radius: 50%;
+    width: 30vw;
+    height: 30vw;
+    transform: translate(115%, 15%);
+}
+
+.Boton {
+ display: flex;
+ height: 3em;
+ width: 100px;
+ align-items: center;
+ justify-content: center;
+ background-color: #ff4b4b4b;
+ border-radius: 3px;
+ letter-spacing: 1px;
+ transition: all 0.2s linear;
+ cursor: pointer;
+ border: none;
+ background: #df3d3d;
+ margin: 17px;
+ font-weight: bold;
+ font-size: 15px;
+ color: aliceblue;
+}
+
+.Boton:hover {
+ font-size: 17px;
+ transform: translateX(5px);
+ box-shadow: 9px 9px 33px #ffaaaa, -9px -9px 33px #da6060;
+ transform: translateY(-1px);
+}
+
+.Boton:active {
+    border: solid #ffffff;
+    color: #ffffff;
+}
