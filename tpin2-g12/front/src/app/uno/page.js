@@ -27,6 +27,7 @@ export default function UNO() {
   const [valorCartaJugada, setValorCartaJugada] = useState("");
   const [cant, setCant] = useState(0)
   const [showModal, setShowModal] = useState(false);
+  const [pachero, setPachero] = useState(false)
   const mailUser = localStorage.getItem("mailUser");
   const searchParams = useSearchParams();
   const limite = searchParams.get("limite");
@@ -79,7 +80,43 @@ export default function UNO() {
     }else{return;}
   })
 
+
+function traerPlayer(datos){
+    if(id != ""){
+      fetch("http://localhost:4000/traerUser",
+      {
+        method:"POST", 
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos)
+      })
+      .then(response => response.json())
+      .then(result =>{
+        console.log(result)
+        if (result.validar == true){
+          setPachero(result.user[0].usuario)
+          console.log(pachero)
+          return;
+        } else {
+          return alert("La Cagaste")
+        }}
+      )
+    }
+  }
+
+  function selectPlayer(id){
+    if(id == undefined){
+        return alert("Error, faltan datos")
+    }
+    let datos = {
+        id: id
+    }
+    traerPlayer(datos)
+  };
+
   useEffect(() => {
+    selectPlayer(mailUser)
     if (!socket) return;
 
     socket.on("connect", () => {
@@ -107,8 +144,40 @@ export default function UNO() {
 
   },[socket])
 
-  function selectCarta(id){
+  function traerCarta(datos){
+    if(id != ""){
+      fetch("http://localhost:4000/traerCarta",
+      {
+        method:"POST", 
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos)
+      })
+      .then(response => response.json())
+      .then(result =>{
+        console.log(result)
+        if (result.validar == true){
+          setColorCartaActual(result.carta[0].color)
+          console.log(colorCartaActual)
+          setValorCartaActual(result.carta[0].valor)
+          console.log(valorCartaActual)
+          return;
+        } else {
+          return alert("La Cagaste")
+        }}
+      )
+    }
+  }
 
+  function selectCarta(id){
+    if(id == undefined){
+        return alert("Error, faltan datos")
+    }
+    let datos = {
+        id: id
+    }
+    traerCarta(datos)
   };
 
   function Uno(){
