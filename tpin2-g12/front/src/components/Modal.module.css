@@ -1,0 +1,42 @@
+.modal {
+    background-color: #272e47;
+    color: #a99ae3;
+    font-family: lexend;
+    padding: 20px;
+    text-align: center;
+    max-width: 40vw;
+    height: 20vw;
+    border-radius: 20px;
+    font-size: 35px;
+    transform: translate(75%, 60%);
+}
+
+.overlay {
+    margin-top: 11vh;
+    display: flex;
+}
+
+.overlay h1 {
+    margin-top: 1vh;
+    margin-left: 42px;
+}
+
+.Button {
+    background: none;
+    border: none;
+    font-size: 30px;
+    font-family: lexend;
+    font-weight: bold;
+    margin-top: -15vw;
+    margin-left: 25px;
+    transition-duration: 0.2s;
+}
+
+.Button:hover {
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.Button:active {
+    transform: scale(0.8);
+}

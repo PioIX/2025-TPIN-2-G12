@@ -1,0 +1,57 @@
+.modal {
+    background-color: #272e47;
+    padding: 60px;
+    max-width: 30vw;
+    border-radius: 20px;
+    transform: translate(110%, 40%);
+}
+
+.overlay {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 95px;
+    align-items: center;
+    margin-left: 10%;
+}
+
+
+.Rojo, .Azul, .Amarillo, .Verde {
+    width: 6vw;
+    height: 6vw;
+    border-radius: 20%;
+    border: solid 3px;
+}
+
+.Rojo {
+    background-color: rgb(236, 48, 48);
+    border-color: rgb(87, 14, 14);
+    transition-duration: 0.2s;
+}
+
+.Azul {
+    background-color: rgb(48, 107, 236);
+    border-color: rgb(14, 37, 87);
+    transition-duration: 0.2s;
+}
+
+.Amarillo {
+    background-color: rgb(236, 186, 48);
+    border-color: rgb(105, 56, 10);
+    transition-duration: 0.2s;
+}
+
+.Verde {
+    background-color: rgb(85, 236, 48);
+    border-color: rgb(10, 59, 10);
+    transition-duration: 0.2s;
+}
+
+.Rojo:hover, .Azul:hover, .Amarillo:hover, .Verde:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.Rojo:active, .Azul:active, .Amarillo:active, .Verde:active {
+    transform: scale(0.9);
+}
