@@ -90,7 +90,15 @@ io.on("connection", (socket) => {
     });
 
     socket.on("listo", (data) => {
-        socket.emit("ready", { turnos: data });
+        socket.emit("ready", { listos: data });
+    });
+
+    socket.on("levantar", (data) =>{
+        socket.emit("aLevantar", {cartasRestantes: data, mailJugable: data, cant:data})
+    })
+
+    socket.on("ganador", (data) => {
+        socket.emit("gano", { ganador: data });
     });
 });
 
@@ -217,6 +225,70 @@ app.post('/crearMesa',async function(req,res){
         if(vector.length == 0){
             await realizarQuery(`INSERT INTO Mesas (num_mesa, estado, limite_max, id_owner), VALUES ("${req.body.num_mesa}", "${req.body.estado}", ${req.body.limite_max}, "${req.body.id_owner}")`)
             res.send({validar:true, code:`"${req.body.limite_max}"`})
+        }
+        else{
+            res.send({validar:false});
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+// UNO
+
+app.post('/traerUno',async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Cartas WHERE baraja = "UNO"`)
+        if(vector.length != 0){
+            res.send({validar:true, mazo: vector})
+        }
+        else{
+            res.send({validar:false});
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+app.post('/traerCarta',async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Cartas WHERE cod_carta = "${req.body.id}"`)
+        if(vector.length != 0){
+            res.send({validar:true, carta: vector})
+        }
+        else{
+            res.send({validar:false});
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+app.post('/traerUser',async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Players WHERE mail = "${req.body.id}"`)
+        if(vector.length != 0){
+            res.send({validar:true, user: vector})
+        }
+        else{
+            res.send({validar:false});
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+// Blackjack
+
+app.post('/traerBJ',async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Cartas WHERE baraja = "Blackjack"`)
+        if(vector.length != 0){
+            res.send({validar:true, mazo: vector})
         }
         else{
             res.send({validar:false});
