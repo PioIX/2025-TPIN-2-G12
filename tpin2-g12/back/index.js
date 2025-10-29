@@ -251,6 +251,36 @@ app.post('/traerUno',async function(req,res){
     }
 })
 
+app.post('/traerCarta',async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Cartas WHERE cod_carta = "${req.body.id}"`)
+        if(vector.length != 0){
+            res.send({validar:true, carta: vector})
+        }
+        else{
+            res.send({validar:false});
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
+app.post('/traerUser',async function(req,res){
+    try {
+        console.log(req.body);
+        let vector = await realizarQuery(`SELECT * FROM Players WHERE mail = "${req.body.id}"`)
+        if(vector.length != 0){
+            res.send({validar:true, user: vector})
+        }
+        else{
+            res.send({validar:false});
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
 // Blackjack
 
 app.post('/traerBJ',async function(req,res){
