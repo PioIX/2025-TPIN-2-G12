@@ -90,7 +90,15 @@ io.on("connection", (socket) => {
     });
 
     socket.on("listo", (data) => {
-        socket.emit("ready", { turnos: data });
+        socket.emit("ready", { listos: data });
+    });
+
+    socket.on("levantar", (data) =>{
+        socket.emit("aLevantar", {cartasRestantes: data, mailJugable: data, cant:data})
+    })
+
+    socket.on("ganador", (data) => {
+        socket.emit("gano", { ganador: data });
     });
 });
 
