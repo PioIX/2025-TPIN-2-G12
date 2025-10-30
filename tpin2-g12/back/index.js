@@ -208,8 +208,8 @@ app.put('/actEstMesa', async function(req,res){
 
 app.post('/traeMesas', async function(req,res){
     try {
-        console.log(req.body);
         let vector = await realizarQuery(`SELECT * FROM Mesas`);
+        console.log("mesas: ", vector);
         res.send({validar:true}, {mesazas:vector})
     } catch (error) {
         res.send({validar:false})
