@@ -81,7 +81,7 @@ export default function UNO() {
   })
 
 
-function traerPlayer(datos){
+  function traerPlayer(datos){
     if(id != ""){
       fetch("http://localhost:4000/traerUser",
       {
@@ -236,7 +236,7 @@ function traerPlayer(datos){
           onClick4={()=> {setColorCartaActual("Verde"); setShowModal(false)}}
         ></ModalColor>
         let index = turnos.findIndex(x => x.concepto === mailUser)
-        if(index= 3){
+        if(index = 3){
           setMailJugable(turnos[0])
         }else{setMailJugable(turnos[index+1])}
         socket.emit("aLevantar", {cartasRestantes: cartas, mailJugable: mailJugable, cant: 4})

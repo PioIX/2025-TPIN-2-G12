@@ -110,12 +110,12 @@ app.post('/login', async function (req, res) {
         let vector = await realizarQuery(`SELECT * FROM Players WHERE mail = "${req.body.mail}" AND contraseña = "${req.body.password}"; `)
         if(vector.length != 0){
             // let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Players WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}"; `)
-            res.send({validar:true, log:`"${req.body.mail}"`})
+            res.send({validar:true, log:`${req.body.mail}`})
         }
         else{
             let verif2 = await realizarQuery(`SELECT * FROM Players WHERE usuario = "${req.body.mail}" AND contraseña = "${req.body.password}"; `)
             if(verif2.length != 0){
-                res.send({validar:true, log:`"${req.body.mail}"`})
+                res.send({validar:true, log:`${req.body.mail}`})
             } else {
                 res.send({validar:false});
             } 
@@ -135,7 +135,7 @@ app.post('/registro', async function (req, res) {
             await realizarQuery(`INSERT INTO Players (mail, usuario, contraseña) VALUES ("${req.body.mail}", "${req.body.user}" , "${req.body.password}");`);
             /* let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Players WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}" `)
             console.log(loguedUser) */
-            res.send({validar:true, log:`"${req.body.mail}"`});
+            res.send({validar:true, log:`${req.body.mail}`});
         }
         else {
             res.send({ validar: false });
@@ -224,7 +224,7 @@ app.post('/crearMesa',async function(req,res){
         let vector = await realizarQuery(`SELECT * FROM Mesas WHERE num_mesa = "${req.body.num_mesa}"`)
         if(vector.length == 0){
             await realizarQuery(`INSERT INTO Mesas (num_mesa, estado, limite_max, id_owner), VALUES ("${req.body.num_mesa}", "${req.body.estado}", ${req.body.limite_max}, "${req.body.id_owner}")`)
-            res.send({validar:true, code:`"${req.body.limite_max}"`})
+            res.send({validar:true, code:`${req.body.limite_max}`})
         }
         else{
             res.send({validar:false});
