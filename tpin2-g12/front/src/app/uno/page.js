@@ -27,7 +27,7 @@ export default function UNO() {
   const [valorCartaJugada, setValorCartaJugada] = useState("");
   const [cant, setCant] = useState(0)
   const [showModal, setShowModal] = useState(false);
-  const [pachero, setPachero] = useState(false)
+  const [pachero, setPachero] = useState("")
   const mailUser = localStorage.getItem("mailUser");
   const searchParams = useSearchParams();
   const limite = searchParams.get("limite");
@@ -51,8 +51,16 @@ export default function UNO() {
     setCant(data.cant)
   })
 
+  socket.on("ultima", (data)=>{
+    let user = data;
+    let cadena= user + " dijo UNO!";
+    <Modal mensaje={cadena}></Modal>
+  })
+
   socket.on("ganador", (data)=>{
-    <Modal usuario={data}></Modal>
+    let user = data;
+    let cadena= "Gano " + user;
+    <Modal mensaje={cadena}></Modal>
   })
 
   useEffect(() => {
@@ -62,7 +70,7 @@ export default function UNO() {
   }, [ready]);
 
   useEffect(() => {
-    if(mano.length == 0 && ultima == false){
+    if(mano.length == 1 && ultima == false){
       for (let i = 0; i < cant; i++) {
         let num = getRandomInt(cartas.length + 1)
         for (let x = 0; x < (mano.length); x++) {
@@ -74,8 +82,8 @@ export default function UNO() {
       }
       socket.emit("enviar_cartas", cartas)
       return;
-    }else if(mano.length == 0 && ultima == true){
-      socket.emit("gano", {ganador: usuarioActual})
+    }else if(mano.length == 1 && ultima == true){
+      //socket.emit("gano", {ganador: usuarioActual})
       return;
     }else{return;}
   })
@@ -180,10 +188,6 @@ export default function UNO() {
     traerCarta(datos)
   };
 
-  function Uno(){
-    
-  }
-
   function Jogar(carta) {
     if (colorCartaActual == colorCartaJugada || valorCartaActual == valorCartaJugada || valorCartaJugada == "Color" || valorCartaJugada == "+4"){
       if(cartaPrevia != ""){
@@ -194,7 +198,6 @@ export default function UNO() {
       if(valorCartaJugada == "Cambio"){
         turnos.reverse();
         socket.emit("turnos", turnos)
-        return;
       }
       if(valorCartaJugada == "Bloqueo"){
         let index = turnos.findIndex(x => x.concepto === mailUser)
@@ -202,7 +205,6 @@ export default function UNO() {
           setMailPrevio(turnos[1])
         }else{setMailPrevio(turnos[index+1])}
         socket.emit("jugadorActual", mailPrevio)
-        return;
       }
       if(valorCartaJugada == "+2"){
         let index = turnos.findIndex(x => x.concepto === mailUser)
@@ -210,7 +212,6 @@ export default function UNO() {
           setMailJugable(turnos[0])
         }else{setMailJugable(turnos[index+1])}
         socket.emit("aLevantar", {cartasRestantes: cartas, mailJugable: mailJugable, cant: 2})
-        return;
       }
       if(valorCartaJugada == "Color"){
         setShowModal(true);
@@ -223,7 +224,6 @@ export default function UNO() {
           onClick4={()=> {setColorCartaActual("Verde"); setShowModal(false)}}
         ></ModalColor>
         }
-        return;
       }
       if(valorCartaJugada == "+4"){
         setShowModal(true);
@@ -241,8 +241,27 @@ export default function UNO() {
         }else{setMailJugable(turnos[index+1])}
         socket.emit("aLevantar", {cartasRestantes: cartas, mailJugable: mailJugable, cant: 4})
         }
+      }
+      if(mano.length == 1 && ultima == false){
+      for (let i = 0; i < cant; i++) {
+        let num = getRandomInt(cartas.length + 1)
+        for (let x = 0; x < (mano.length); x++) {
+          if (num != mano[x]) {
+            mano.push(num)
+            cartas.splice(num, 1)
+          }
+        }
+      }
+      socket.emit("enviar_cartas", cartas)
+      return;
+      }else if(mano.length == 1 && ultima == true){
+        socket.emit("uno", {player: mailUser})
         return;
       }
+      if(mano.lenght=0){
+        socket.emit("gano", {ganador: pachero})
+      }
+      return;
     } else{alert("Error esa carta no se puede jugar")}
   };
 
@@ -311,10 +330,12 @@ export default function UNO() {
     alert("quilombazo")
   }
 
-
-
   return (
     <>
+    <div className={styles.uiMesa}>
+      <Carta></Carta>
+    </div>
+    <div className={styles.uiJugador}>
       <Button
       className={styles.Boton}
       text="<"
@@ -352,13 +373,14 @@ export default function UNO() {
         <Button
           className={styles.habilitarUno}
           text={"UNO!"}
-          onClick={Uno()}
+          onClick={()=> setUltima(true)}
         ></Button>
         :
         <Button
           className={styles.deshabilitarUno}
         ></Button>
         }
+    </div>
     </>
   );
 }

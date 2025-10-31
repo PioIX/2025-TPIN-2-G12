@@ -78,27 +78,54 @@ io.on("connection", (socket) => {
     });
 
     socket.on("selectCartas", (data) => {
-        socket.emit("enviar_cartas", { cartasRestantes: data });
+        io.to(req.session.room).emit("enviar_cartas", {
+            room: realizarQuery.session.room,
+            cartasRestantes: data,
+        });
     });
 
     socket.on("jugadorAnterior", (data) => {
-        socket.emit("jugadorActual", { mailJugado: data });
+        io.to(req.session.room).emit("jugadorActual", {
+            room: req.session.room,
+            mailJugado: data,
+        });
     });
 
     socket.on("ordenTurnos", (data) => {
-        socket.emit("turnos", { turnos: data });
+        io.to(req.session.room).emit("turnos", {
+            room: req.session.room,
+            turnos: data,
+        });
     });
 
     socket.on("listo", (data) => {
-        socket.emit("ready", { listos: data });
+        io.to(req.session.room).emit("ready", {
+            room: req.session.room,
+            listos: data,
+        });
     });
 
     socket.on("levantar", (data) =>{
-        socket.emit("aLevantar", {cartasRestantes: data, mailJugable: data, cant:data})
+        io.to(req.session.room).emit("aLevantar", {
+            room: req.session.room,
+            cartasRestantes: data,
+            mailJugable: data,
+            cant:data
+        })
     })
 
     socket.on("ganador", (data) => {
-        socket.emit("gano", { ganador: data });
+        io.to(req.session.room).emit("gano", {
+            room: req.session.room,
+            ganador: data,
+        });
+    });
+
+    socket.on("ultima", (data) => {
+        io.to(req.session.room).emit("uno", {
+            room: req.session.room,
+            player: data,
+        });
     });
 });
 
