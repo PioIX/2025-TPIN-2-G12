@@ -1,4 +1,5 @@
 .Div {
+    border: solid 5px #3d4b7e;
     background-color: #272e47;
     display: flex;
     flex-direction: column;
@@ -17,8 +18,8 @@
 .Input {
     height: 2.5vw;
     border-radius: 20px;
-    background-color: #a99ae3;
-    border: solid #a99ae3;
+    background: radial-gradient(circle, #a99ae3, #7c63dd);
+    border: solid #7c63dd;
     margin-right: 15px;
     margin-left: 15px;
     font-size: 20px;
@@ -30,14 +31,23 @@
 
 .Input:hover {
     border: solid aliceblue;
+    box-shadow: 2px 2px 10px #7263af, -2px -2px 10px #7263af;
 }
 
 .H4 {
     font-size: 20px;
+    background: linear-gradient(#a99ae3, #5931f8);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: white;
 }
 
 .H2 {
     font-size: 30px;
+    background: linear-gradient(#a99ae3, #5931f8);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: white;
 }
 
 .Creador {
@@ -48,22 +58,22 @@
     margin-left: 23%;
     font-size: 20px;
     font-family: lexend;
-    background-color: #a99ae3;
+    background: radial-gradient(circle, #a99ae3, #7c63dd);
+    border: solid #7c63dd;
     color: #272e47;
-    border: solid #a99ae3;
     transition-duration: 0.2S;
 }
 
 .Creador:hover {
-    background-color: #272e47;
-    color: #a99ae3;
-    width: 18vw;
-    margin-left: 18%;
+    cursor: pointer;
+    transform: scale(1.1);
+    border: solid aliceblue;
+    box-shadow: 5px 5px 17px #453680, -5px -5px 17px #453680;
 }
 
 .Creador:active {
-    border: solid white;
-    color: white;
+    cursor: pointer;
+    transform: scale(0.9);
 }
 
 
@@ -79,7 +89,8 @@
  transition: all 0.2s linear;
  cursor: pointer;
  border: none;
- background: #df3d3d;
+    background: #d41c1c;
+    background: linear-gradient(rgba(212, 28, 28, 1) 0%, rgba(235, 52, 149, 1) 100%);
  margin: 17px;
  font-weight: bold;
  font-size: 15px;
@@ -87,13 +98,12 @@
 }
 
 .Boton:hover {
- font-size: 17px;
- transform: translateX(5px);
- box-shadow: 9px 9px 33px #ffaaaa, -9px -9px 33px #da6060;
- transform: translateY(-1px);
+    cursor: pointer;
+    transform: scale(1.1);
+    color: #ffffff;
+    box-shadow: 4px 4px 35px #c44c7e, -4px -4px 35px #c44c7e;
 }
 
 .Boton:active {
-    border: solid #ffffff;
-    color: #ffffff;
+ transform: scale(0.9);
 }

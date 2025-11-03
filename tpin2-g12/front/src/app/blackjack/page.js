@@ -6,6 +6,7 @@ export default function Bj() {
     return (
         <>
             <ModalColor></ModalColor>
+            <Modal></Modal>
         </>
     )
 }

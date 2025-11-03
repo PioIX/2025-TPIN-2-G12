@@ -8,6 +8,7 @@
 
 
 .Div {
+    border: solid 5px #3d4b7e;
     background-color: #272e47;
     display: flex;
     flex-direction: column;
@@ -19,15 +20,15 @@
     padding: 10px;
     padding-top: 20px;
     padding-bottom: 30px;
-    transform: translate(115%, 40%);
+    transform: translate(115%, 30%);
     font-family: lexend;
 }
 
 .Input {
     height: 2.5vw;
     border-radius: 20px;
-    background-color: #a99ae3;
-    border: solid #a99ae3;
+    background: radial-gradient(circle, #a99ae3, #7c63dd);
+    border: solid #7c63dd;
     margin-right: 15px;
     margin-left: 15px;
     font-size: 20px;
@@ -39,14 +40,23 @@
 
 .Input:hover {
     border: solid aliceblue;
+    box-shadow: 2px 2px 10px #7263af, -2px -2px 10px #7263af;
 }
 
 .H4 {
     font-size: 20px;
+    background: linear-gradient(#a99ae3, #5931f8);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: white;
 }
 
 .H2 {
     font-size: 30px;
+    background: linear-gradient(#a99ae3, #5931f8);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: white;
 }
 
 .Button {
@@ -57,22 +67,22 @@
     margin-left: 23%;
     font-size: 20px;
     font-family: lexend;
-    background-color: #a99ae3;
+    background: radial-gradient(circle, #a99ae3, #7c63dd);
+    border: solid #7c63dd;
     color: #272e47;
-    border: solid #a99ae3;
     transition-duration: 0.2S;
 }
 
 .Button:hover {
-    background-color: #272e47;
-    color: #a99ae3;
-    width: 18vw;
-    margin-left: 18%;
+    cursor: pointer;
+    border: solid aliceblue;
+    transform: scale(1.1);
+    box-shadow: 5px 5px 17px #453680, -5px -5px 17px #453680;
 }
 
 .Button:active {
-    border: solid white;
-    color: white;
+    cursor: pointer;
+    transform: scale(0.9);
 }
 
 .NoCuenta {
@@ -84,20 +94,20 @@
     margin-left: 23%;
     font-size: 20px;
     font-family: lexend;
-    background-color: #a99ae3;
+    background: radial-gradient(circle, #a99ae3, #7c63dd);
+    border: solid #7c63dd;
     color: #272e47;
-    border: solid #a99ae3;
     transition-duration: 0.2S;
 }
 
 .NoCuenta:hover {
-    background-color: #272e47;
-    color: #a99ae3;
-    width: 18vw;
-    margin-left: 18%;
+    cursor: pointer;
+    border: solid aliceblue;
+    transform: scale(1.1);
+    box-shadow: 5px 5px 17px #453680, -5px -5px 17px #453680;
 }
 
 .NoCuenta:active {
-    border: solid white;
-    color: white;
+    cursor: pointer;
+    transform: scale(0.9);
 }

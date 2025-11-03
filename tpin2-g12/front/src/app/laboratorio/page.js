@@ -78,7 +78,7 @@ export default function Laboratorio(){
     <>
         <Button
         className={styles.Boton}
-        text="<"
+        text="Volver"
         ></Button>
         <div className={styles.Div}>
             <FormR

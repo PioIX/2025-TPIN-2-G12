@@ -9,10 +9,10 @@ export default function Modal(props){
             <div className={styles.modal}>
                 <div className={styles.overlay}>
                     <h1>GANO {props.usuario}</h1>
-                    <Button className={styles.Button}
-                        text="X"
-                    ></Button>
                 </div>
+                <Button className={styles.Button}
+                    text="Cerrar"
+                ></Button>
             </div>
         </>
     )

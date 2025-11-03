@@ -8,6 +8,9 @@ export default function ModalColor(props){
         <>
             <div className={styles.modal}>
                 <div className={styles.overlay}>
+                    <h1
+                        className={styles.titulo}
+                    >Seleccionar color</h1>
                     <Button
                         className={styles.Rojo}
                         onClick={props.onClick1}
