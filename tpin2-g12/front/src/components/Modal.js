@@ -5,7 +5,7 @@ export default function Modal(props){
         <>
             <div className="modal">
                 <div className="overlay">
-                    <h1>GANO {props.usuario}</h1>
+                    <h1>{props.mensaje}</h1>
                 </div>
             </div>
         </>

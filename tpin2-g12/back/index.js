@@ -77,28 +77,59 @@ io.on("connection", (socket) => {
         });
     });
 
+    socket.on("Salir", ()=>{
+        socket.leave(req.session.room);
+    })
+
     socket.on("selectCartas", (data) => {
-        socket.emit("enviar_cartas", { cartasRestantes: data });
+        io.to(req.session.room).emit("enviar_cartas", {
+            room: realizarQuery.session.room,
+            cartasRestantes: data,
+        });
     });
 
     socket.on("jugadorAnterior", (data) => {
-        socket.emit("jugadorActual", { mailJugado: data });
+        io.to(req.session.room).emit("jugadorActual", {
+            room: req.session.room,
+            mailJugado: data,
+        });
     });
 
     socket.on("ordenTurnos", (data) => {
-        socket.emit("turnos", { turnos: data });
+        io.to(req.session.room).emit("turnos", {
+            room: req.session.room,
+            turnos: data,
+        });
     });
 
     socket.on("listo", (data) => {
-        socket.emit("ready", { listos: data });
+        io.to(req.session.room).emit("ready", {
+            room: req.session.room,
+            listos: data,
+        });
     });
 
     socket.on("levantar", (data) =>{
-        socket.emit("aLevantar", {cartasRestantes: data, mailJugable: data, cant:data})
+        io.to(req.session.room).emit("aLevantar", {
+            room: req.session.room,
+            cartasRestantes: data,
+            mailJugable: data,
+            cant:data
+        })
     })
 
     socket.on("ganador", (data) => {
-        socket.emit("gano", { ganador: data });
+        io.to(req.session.room).emit("gano", {
+            room: req.session.room,
+            ganador: data,
+        });
+    });
+
+    socket.on("ultima", (data) => {
+        io.to(req.session.room).emit("uno", {
+            room: req.session.room,
+            player: data,
+        });
     });
 });
 
@@ -110,12 +141,12 @@ app.post('/login', async function (req, res) {
         let vector = await realizarQuery(`SELECT * FROM Players WHERE mail = "${req.body.mail}" AND contraseña = "${req.body.password}"; `)
         if(vector.length != 0){
             // let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Players WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}"; `)
-            res.send({validar:true, log:`"${req.body.mail}"`})
+            res.send({validar:true, log:`${req.body.mail}`})
         }
         else{
             let verif2 = await realizarQuery(`SELECT * FROM Players WHERE usuario = "${req.body.mail}" AND contraseña = "${req.body.password}"; `)
             if(verif2.length != 0){
-                res.send({validar:true, log:`"${req.body.mail}"`})
+                res.send({validar:true, log:`${req.body.mail}`})
             } else {
                 res.send({validar:false});
             } 
@@ -135,7 +166,7 @@ app.post('/registro', async function (req, res) {
             await realizarQuery(`INSERT INTO Players (mail, usuario, contraseña) VALUES ("${req.body.mail}", "${req.body.user}" , "${req.body.password}");`);
             /* let loguedUser = await realizarQuery(`SELECT Id_usuario FROM Players WHERE Mail = "${req.body.mail}" AND Contra = "${req.body.password}" `)
             console.log(loguedUser) */
-            res.send({validar:true, log:`"${req.body.mail}"`});
+            res.send({validar:true, log:`${req.body.mail}`});
         }
         else {
             res.send({ validar: false });
@@ -224,7 +255,7 @@ app.post('/crearMesa',async function(req,res){
         let vector = await realizarQuery(`SELECT * FROM Mesas WHERE num_mesa = "${req.body.num_mesa}"`)
         if(vector.length == 0){
             await realizarQuery(`INSERT INTO Mesas (num_mesa, estado, limite_max, id_owner), VALUES ("${req.body.num_mesa}", "${req.body.estado}", ${req.body.limite_max}, "${req.body.id_owner}")`)
-            res.send({validar:true, code:`"${req.body.limite_max}"`})
+            res.send({validar:true, code:`${req.body.limite_max}`})
         }
         else{
             res.send({validar:false});

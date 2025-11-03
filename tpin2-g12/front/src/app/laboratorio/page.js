@@ -38,7 +38,7 @@ export default function Laboratorio(){
         } else {alert("Modo inexistente, los modos son Uno o Blackjack")}
     }
 
-    function crearMesa(){
+    function crearMesa(datos){
         if(codigoMesa != "" || modo != "" || limite != "" || loguedUser != ""){
             fetch("http://localhost:4000/crearMesa",
             {
