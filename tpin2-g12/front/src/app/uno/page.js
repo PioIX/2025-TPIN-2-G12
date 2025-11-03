@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@/components/Button";
 import Carta from "@/components/Carta";
 import Modal from "@/components/Modal";
@@ -12,6 +13,7 @@ import styles from "@/app/uno/uno.module.css"
 
 export default function UNO() {
   const {isConnected, socket} = useSocket();
+  const router = useRouter();
   const [cartas, setCartas] = useState([]);
   const [mano, setMano] = useState([]);
   const [ready, setReady] = useState(0);
@@ -35,6 +37,10 @@ export default function UNO() {
 
   socket.on('jugadorAnterior', (data) => {
     setMailPrevio(data.mailJugado);
+    let index = turnos.findIndex(x => x.concepto === mailUser)
+      if(index= 3){
+        setMailJugable(turnos[1])
+      }else{setMailJugable(turnos[index+1])}
   });
 
   socket.on("listo", (data)=>{
@@ -45,10 +51,17 @@ export default function UNO() {
     setCartas(data.cartasRestantes)
   })
 
+  socket.on("ordenTurnos", (data)=>{
+    setTurnos(data)
+  })
+
   socket.on("levantar", (data)=>{
     setCartas(data.cartasRestantes)
     setMailJugable(data.mailJugable)
     setCant(data.cant)
+    if(mailJugable==mailUser){
+      levantar()
+    }
   })
 
   socket.on("ultima", (data)=>{
@@ -139,10 +152,6 @@ export default function UNO() {
   }, [])
 
   useEffect(()=> {
-    if(mailJugable==mailUser){
-      levantar()
-    }
-
     if (!socket) return;
     socket.on("joinedRoom", data => {
       if (data.mail != mailUser && mailOwner == mailUser ) {
@@ -197,21 +206,23 @@ export default function UNO() {
       setCartaActual(carta);
       if(valorCartaJugada == "Cambio"){
         turnos.reverse();
-        socket.emit("turnos", turnos)
+        socket.emit("turnos", turnos);
+        socket.emit("jugadorActual", {mailJugado: mailUser})
       }
       if(valorCartaJugada == "Bloqueo"){
         let index = turnos.findIndex(x => x.concepto === mailUser)
         if(index= 3){
           setMailPrevio(turnos[1])
         }else{setMailPrevio(turnos[index+1])}
-        socket.emit("jugadorActual", mailPrevio)
+        socket.emit("jugadorActual", turnos[index])
       }
       if(valorCartaJugada == "+2"){
         let index = turnos.findIndex(x => x.concepto === mailUser)
         if(index= 3){
-          setMailJugable(turnos[0])
+          setMailJugable(turnos[1])
         }else{setMailJugable(turnos[index+1])}
-        socket.emit("aLevantar", {cartasRestantes: cartas, mailJugable: mailJugable, cant: 2})
+        socket.emit("aLevantar", {cartasRestantes: cartas, mailJugable: turnos[index], cant: 2})
+        socket.emit("jugadorActual", {mailJugado: turnos[index]})
       }
       if(valorCartaJugada == "Color"){
         setShowModal(true);
@@ -224,6 +235,7 @@ export default function UNO() {
           onClick4={()=> {setColorCartaActual("Verde"); setShowModal(false)}}
         ></ModalColor>
         }
+        socket.emit("jugadorActual", {mailJugado: mailUser})
       }
       if(valorCartaJugada == "+4"){
         setShowModal(true);
@@ -239,7 +251,8 @@ export default function UNO() {
         if(index = 3){
           setMailJugable(turnos[0])
         }else{setMailJugable(turnos[index+1])}
-        socket.emit("aLevantar", {cartasRestantes: cartas, mailJugable: mailJugable, cant: 4})
+        socket.emit("aLevantar", {cartasRestantes: cartas, mailJugable: turnos[index], cant: 4})
+        socket.emit("jugadorActual", {mailJugado: turnos[index]})
         }
       }
       if(mano.length == 1 && ultima == false){
@@ -325,21 +338,23 @@ export default function UNO() {
     }, 1000); // 1000 milisegundos = 1 segundo
 
   }
-  
-  function cambioTurno(){
-    alert("quilombazo")
+
+  function mover(){
+    socket.on("Salir");
+    router.push("../mesas")
   }
 
   return (
     <>
     <div className={styles.uiMesa}>
       <Carta></Carta>
-    </div>
-    <div className={styles.uiJugador}>
       <Button
       className={styles.Boton}
+      onClick={mover}
       text="<"
       ></Button>
+    </div>
+    <div className={styles.uiJugador}>
       <Pachero
         className={"Juan"/*styles.H2*/}
         usuario={"usuarioActual"}
@@ -350,12 +365,22 @@ export default function UNO() {
       <Timer></Timer>
       <div className="mano">
         {mano.length != 0 && mano.map((carta) => {
+          {mailUser == mailJugable ?
           <Carta
+            className={styles.turno}
             colorete={colorCartaActual}
             id={carta.id}
             onClick={selectCarta(carta.id)}
             img={carta.link}
           ></Carta>
+          :
+          <Carta
+            className={styles.noTurno}
+            colorete={colorCartaActual}
+            id={carta.id}
+            img={carta.link}
+          ></Carta>
+          }
         })}
       </div>
       {valorCartaJugada==valorCartaActual || colorCartaActual == colorCartaJugada || valorCartaJugada == "Color" || valorCartaJugada == "+4" ?

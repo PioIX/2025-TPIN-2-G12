@@ -77,6 +77,10 @@ io.on("connection", (socket) => {
         });
     });
 
+    socket.on("Salir", ()=>{
+        socket.leave(req.session.room);
+    })
+
     socket.on("selectCartas", (data) => {
         io.to(req.session.room).emit("enviar_cartas", {
             room: realizarQuery.session.room,
