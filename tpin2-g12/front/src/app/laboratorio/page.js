@@ -38,6 +38,10 @@ export default function Laboratorio(){
         } else {alert("Modo inexistente, los modos son Uno o Blackjack")}
     }
 
+    function volver(){
+        router.push("../mesas");
+    }
+
     function crearMesa(){
         if(codigoMesa != "" || modo != "" || limite != "" || loguedUser != ""){
             fetch("http://localhost:4000/crearMesa",
@@ -77,6 +81,7 @@ export default function Laboratorio(){
     return(
     <>
         <Button
+        onClick={volver}
         className={styles.Boton}
         text="Volver"
         ></Button>

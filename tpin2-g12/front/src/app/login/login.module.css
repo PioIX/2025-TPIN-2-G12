@@ -27,13 +27,13 @@
 .Input {
     height: 2.5vw;
     border-radius: 20px;
-    background: radial-gradient(circle, #a99ae3, #7c63dd);
     border: solid #7c63dd;
     margin-right: 15px;
     margin-left: 15px;
     font-size: 20px;
     padding: 5px;
     font-family: lexend;
+    background-color: #7263af;
     color: #272e47;
     transition-duration: 0.2s;
 }
@@ -67,8 +67,8 @@
     margin-left: 23%;
     font-size: 20px;
     font-family: lexend;
-    background: radial-gradient(circle, #a99ae3, #7c63dd);
     border: solid #7c63dd;
+    background-color: #7263af;
     color: #272e47;
     transition-duration: 0.2S;
 }
@@ -94,7 +94,7 @@
     margin-left: 23%;
     font-size: 20px;
     font-family: lexend;
-    background: radial-gradient(circle, #a99ae3, #7c63dd);
+    background-color: #7263af;
     border: solid #7c63dd;
     color: #272e47;
     transition-duration: 0.2S;

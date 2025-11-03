@@ -12,7 +12,7 @@
 }
 
 .overlay {
-    margin-top: 11vh;
+    margin-top: 10vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -29,10 +29,11 @@
 .Button {
     background: #d41c1c;
     background: linear-gradient(rgba(212, 28, 28, 1) 0%, rgba(235, 52, 149, 1) 100%);
-    padding: 15px;
+    color: aliceblue;
+    padding: 10px;
     border-radius: 3px;
     border: none;
-    font-size: 30px;
+    font-size: 25px;
     font-family: lexend;
     margin-top: 40px;
     font-weight: bold;
