@@ -282,7 +282,7 @@ app.post('/traerUno',async function(req,res){
     }
 })
 
-app.post('/traerCarta',async function(req,res){
+app.post('/traerCartaJugada',async function(req,res){
     try {
         console.log(req.body);
         let vector = await realizarQuery(`SELECT * FROM Cartas WHERE cod_carta = "${req.body.id}"`)

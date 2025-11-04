@@ -12,28 +12,31 @@ import { useEffect, useState } from "react";
 import styles from "@/app/uno/uno.module.css"
 
 export default function UNO() {
-  const {isConnected, socket} = useSocket();
+  const {socket} = useSocket();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [cartas, setCartas] = useState([]);
   const [mano, setMano] = useState([]);
-  const [ready, setReady] = useState(0);
+  const [turnos, setTurnos] = useState([]);
   const [cartaActual, setCartaActual] = useState("");
   const [cartaPrevia, setCartaPrevia] = useState("");
-  const [turnos, setTurnos] = useState([]);
   const [mailPrevio, setMailPrevio] = useState("");
   const [mailJugable, setMailJugable] = useState("");
   const [colorCartaActual, setColorCartaActual] = useState("");
   const [colorCartaJugada, setColorCartaJugada] = useState("");
   const [valorCartaActual, setValorCartaActual] = useState("");
-  const [ultima, setUltima] = useState(false)
   const [valorCartaJugada, setValorCartaJugada] = useState("");
-  const [cant, setCant] = useState(0)
+  const [ImagenCartaActual, setImagenCartaActual] = useState("");
+  const [pachero, setPachero] = useState("");
+  const [ready, setReady] = useState(0);
+  const [cant, setCant] = useState(0);
+  const [ultima, setUltima] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [pachero, setPachero] = useState("")
+  const [temporizador, setTemporizador] = useState(false);
   const mailUser = localStorage.getItem("mailUser");
-  const searchParams = useSearchParams();
   const limite = searchParams.get("limite");
   
+// Escuchar Socket
 
   socket.on('jugadorAnterior', (data) => {
     setMailPrevio(data.mailJugado);
@@ -41,6 +44,7 @@ export default function UNO() {
       if(index= 3){
         setMailJugable(turnos[1])
       }else{setMailJugable(turnos[index+1])}
+    setTemporizador(true)
   });
 
   socket.on("listo", (data)=>{
@@ -76,12 +80,27 @@ export default function UNO() {
     <Modal mensaje={cadena}></Modal>
   })
 
+// UseEffects
+
   useEffect(() => {
     if (ready == limite) {
+      traerCartas()
       repartija()
     }
   }, [ready]);
 
+  useEffect(() => {
+    if (temporaizador == true && mailJugable == mailUser) {
+      timer()
+    }
+  }, [temporizador]);
+
+
+    useEffect(() => {
+      let index = cartas.cod_carta.findIndex(x => x.concepto === cartaActual)
+      setImagenCartaActual(cartas[index].imagen)
+    }, [cartaActual]);
+  
   useEffect(() => {
     if(mano.length == 1 && ultima == false){
       for (let i = 0; i < cant; i++) {
@@ -96,11 +115,37 @@ export default function UNO() {
       socket.emit("enviar_cartas", cartas)
       return;
     }else if(mano.length == 1 && ultima == true){
-      //socket.emit("gano", {ganador: usuarioActual})
+      socket.emit("gano", {ganador: usuarioActual})
       return;
     }else{return;}
   })
+  
+  useEffect(() => {
+    selectPlayer(mailUser)
+    if (!socket) return;
+  
+    socket.on("connect", () => {
+      //corre una vez al conectar el socket con el back
+      socket.emit("joinRoom", { room: `chat ${codigoMesa}`, mail: mailUser })
+      setReady(ready + 1)
+      socket.emit("ready", ready)
+      turnos.push(mailUser)
+      socket.emit("turnos", {turnos: turnos})
+      socket.emit("jugadorActual", {mailJugado: mailUser})
+    })
+  }, [])
+  
+  useEffect(()=> {
+    if (!socket) return;
+    socket.on("joinedRoom", data => {
+      if (data.mail != mailUser && mailOwner == mailUser ) {
+        turnos.push(data.mail)
+      }
+    })
+  
+  },[socket])
 
+// Fetchs
 
   function traerPlayer(datos){
     if(id != ""){
@@ -136,34 +181,9 @@ export default function UNO() {
     traerPlayer(datos)
   };
 
-  useEffect(() => {
-    selectPlayer(mailUser)
-    if (!socket) return;
-
-    socket.on("connect", () => {
-      //corre una vez al conectar el socket con el back
-      socket.emit("joinRoom", { room: `chat ${codigoMesa}`, mail: mailUser })
-      setReady(ready + 1)
-      socket.emit("ready", ready)
-      turnos.push(mailUser)
-      socket.emit("turnos", {turnos: turnos})
-      socket.emit("jugadorActual", {mailJugado: mailUser})
-    })
-  }, [])
-
-  useEffect(()=> {
-    if (!socket) return;
-    socket.on("joinedRoom", data => {
-      if (data.mail != mailUser && mailOwner == mailUser ) {
-        turnos.push(data.mail)
-      }
-    })
-
-  },[socket])
-
-  function traerCarta(datos){
+  function traerCartaJugada(datos){
     if(id != ""){
-      fetch("http://localhost:4000/traerCarta",
+      fetch("http://localhost:4000/traerCartaJugada",
       {
         method:"POST", 
         headers: {
@@ -176,9 +196,32 @@ export default function UNO() {
         console.log(result)
         if (result.validar == true){
           setColorCartaActual(result.carta[0].color)
-          console.log(colorCartaActual)
+          console.log(colorCartaJugada)
           setValorCartaActual(result.carta[0].valor)
-          console.log(valorCartaActual)
+          console.log(valorCartaJugada)
+          return;
+        } else {
+          return alert("La Cagaste")
+        }}
+      )
+    }
+  }
+
+  function traerCartas(){
+    if(id != ""){
+      fetch("http://localhost:4000/traerUno",
+      {
+        method:"POST", 
+        headers: {
+            "Content-Type": "application/json",
+        },
+      })
+      .then(response => response.json())
+      .then(result =>{
+        console.log(result)
+        if (result.validar == true){
+          setCartas(result.mazo)
+          console.log(cartas)
           return;
         } else {
           return alert("La Cagaste")
@@ -194,8 +237,10 @@ export default function UNO() {
     let datos = {
         id: id
     }
-    traerCarta(datos)
+    traerCartaJugada(datos)
   };
+
+// Funcionalidad del Juego
 
   function Jogar(carta) {
     if (colorCartaActual == colorCartaJugada || valorCartaActual == valorCartaJugada || valorCartaJugada == "Color" || valorCartaJugada == "+4"){
@@ -295,6 +340,16 @@ export default function UNO() {
       socket.emit("enviar_cartas", cartas)
   }
 
+  function agarrarCarta(){
+    let num = getRandomInt(cartas.length - 1)
+        for (let x = 0; x < (mano.length); x++) {
+          if (num != mano[x]) {
+            mano.push(cartas[num])
+            cartas.splice(num, 1)
+          }
+        }
+  }
+
   function repartija() {
     let actual = 0
     for(let y = 0; y <= turnos.length;  y++){
@@ -307,14 +362,18 @@ export default function UNO() {
 
     if (turnos[actual] = mailUser) {
       for (let i = 0; mano.length < 7; i++) {
-        let num = getRandomInt(cartas.length + 1)
+        let num = getRandomInt(cartas.length - 1)
         for (let x = 0; x < (mano.length); x++) {
           if (num != mano[x]) {
-            mano.push(num)
+            mano.push(cartas[num])
             cartas.splice(num, 1)
           }
         }
       }
+      let pepe = getRandomInt(cartas.length-1)
+      setCartaActual(cartas[pepe].cod_carta)
+      setColorCartaActual(cartas[pepe].color)
+      setValorCartaActual(cartas[pepe].valor)
       socket.emit("enviar_cartas", cartas)
       socket.emit("jugadorActual", mailUser)
     }
@@ -344,10 +403,19 @@ export default function UNO() {
     router.push("../mesas")
   }
 
+// Lo que se muestra en Pantalla
   return (
     <>
     <div className={styles.uiMesa}>
-      <Carta></Carta>
+      <Carta
+        className={styles.cartaActual}
+            id={cartaActual}
+            img={ImagenCartaActual}
+      ></Carta>
+      <Button
+        className={styles.mazo}
+        onClick={agarrarCarta}
+      ></Button>
       <Button
       className={styles.Boton}
       onClick={mover}
@@ -362,21 +430,21 @@ export default function UNO() {
       ></Pachero>
       <div className={styles.Div}>
       </div>
-      <Timer></Timer>
+      <Timer
+
+      ></Timer>
       <div className="mano">
         {mano.length != 0 && mano.map((carta) => {
           {mailUser == mailJugable ?
           <Carta
             className={styles.turno}
-            colorete={colorCartaActual}
-            id={carta.id}
-            onClick={selectCarta(carta.id)}
-            img={carta.link}
+            id={carta.cod_carta}
+            onClick={selectCarta(carta.cod_carta)}
+            img={carta.imagen}
           ></Carta>
           :
           <Carta
             className={styles.noTurno}
-            colorete={colorCartaActual}
             id={carta.id}
             img={carta.link}
           ></Carta>
