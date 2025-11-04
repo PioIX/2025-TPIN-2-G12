@@ -37,12 +37,11 @@ export default function Laboratorio(){
             router.replace(`../blackjack?limite=${limit}`)
         } else {alert("Modo inexistente, los modos son Uno o Blackjack")}
     }
-
     function volver(){
         router.push("../mesas");
     }
 
-    function crearMesa(){
+    function crearMesa(datos){
         if(codigoMesa != "" || modo != "" || limite != "" || loguedUser != ""){
             fetch("http://localhost:4000/crearMesa",
             {

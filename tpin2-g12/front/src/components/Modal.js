@@ -8,7 +8,7 @@ export default function Modal(props){
         <>
             <div className={styles.modal}>
                 <div className={styles.overlay}>
-                    <h1>GANO {props.usuario}</h1>
+                      <h1>{props.mensaje}</h1>
                 </div>
                 <Button className={styles.Button}
                     text="Cerrar"
