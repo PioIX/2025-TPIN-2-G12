@@ -19,20 +19,21 @@
 .Div {
   display: flex;
   flex-direction: row;
-  margin-left: 27vw;
+  margin-left: 26vw;
   gap: 10vw;
-  transform: translateY(15vw);
+  transform: translateY(35vw);
   background-color: #272e47;
   border: solid 5px #3d4b7e;
   border-radius: 20PX;
   padding: 40PX;
-  max-width: 45VW;
+  max-width: 47VW;
 }
 
 .Crear {
    display: flex;
- height: 3em;
- width: 100px;
+ height: 4em;
+ padding: 15px;
+ width: 120px;
  align-items: center;
  justify-content: center;
  background-color: #ff4b4b4b;
@@ -62,8 +63,9 @@
 
 .Cerrar {
    display: flex;
- height: 3em;
- width: 100px;
+  padding: 15px;
+  height: 4em;
+ width: 120px;
  align-items: center;
  justify-content: center;
  background-color: #ff4b4b4b;
@@ -93,8 +95,9 @@
 
 .Unirse {
    display: flex;
- height: 3em;
- width: 100px;
+ height: 4em;
+ width: 120px;
+ padding: 15px;
  align-items: center;
  justify-content: center;
  background-color: #ff4b4b4b;
