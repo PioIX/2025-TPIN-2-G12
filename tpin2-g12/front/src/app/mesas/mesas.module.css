@@ -11,7 +11,113 @@
     color: #272e47;
     border-radius: 20px;
     border: solid #272e47 2px;
-    max-width: 30%;
+    max-width: 25%;
     max-height: 30%;
     padding: 20px;
+}
+
+.Div {
+  display: flex;
+  flex-direction: row;
+  margin-left: 27vw;
+  gap: 10vw;
+  transform: translateY(15vw);
+  background-color: #272e47;
+  border: solid 5px #3d4b7e;
+  border-radius: 20PX;
+  padding: 40PX;
+  max-width: 45VW;
+}
+
+.Crear {
+   display: flex;
+ height: 3em;
+ width: 100px;
+ align-items: center;
+ justify-content: center;
+ background-color: #ff4b4b4b;
+ border-radius: 3px;
+ letter-spacing: 1px;
+ transition: all 0.2s linear;
+ cursor: pointer;
+ border: none;
+    background: #d41c1c;
+    background: linear-gradient(rgba(212, 28, 28, 1) 0%, rgba(235, 52, 149, 1) 100%);
+ margin: 17px;
+ font-weight: bold;
+ font-size: 15px;
+ color: aliceblue;
+}
+
+.Crear:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  color: #ffffff;
+  box-shadow: 4px 4px 35px #c44c7e, -4px -4px 35px #c44c7e;
+}
+
+.Crear:after {
+  transform: scale(0.9);
+}
+
+.Cerrar {
+   display: flex;
+ height: 3em;
+ width: 100px;
+ align-items: center;
+ justify-content: center;
+ background-color: #ff4b4b4b;
+ border-radius: 3px;
+ letter-spacing: 1px;
+ transition: all 0.2s linear;
+ cursor: pointer;
+ border: none;
+    background: #d41c1c;
+    background: linear-gradient(rgba(212, 28, 28, 1) 0%, rgba(235, 52, 149, 1) 100%);
+ margin: 17px;
+ font-weight: bold;
+ font-size: 15px;
+ color: aliceblue;
+}
+
+.Cerrar:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  color: #ffffff;
+  box-shadow: 4px 4px 35px #c44c7e, -4px -4px 35px #c44c7e;
+}
+
+.Cerrar:after {
+  transform: scale(0.9);
+}
+
+.Unirse {
+   display: flex;
+ height: 3em;
+ width: 100px;
+ align-items: center;
+ justify-content: center;
+ background-color: #ff4b4b4b;
+ border-radius: 3px;
+ letter-spacing: 1px;
+ transition: all 0.2s linear;
+ cursor: pointer;
+ border: none;
+    background: #d41c1c;
+    background: linear-gradient(rgba(212, 28, 28, 1) 0%, rgba(235, 52, 149, 1) 100%);
+ margin: 17px;
+ font-weight: bold;
+ font-size: 15px;
+ color: aliceblue;
+}
+
+.Unirse:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  color: #ffffff;
+  box-shadow: 4px 4px 35px #c44c7e, -4px -4px 35px #c44c7e;
+}
+
+.Unirse:after {
+  transform: scale(0.9);
 }

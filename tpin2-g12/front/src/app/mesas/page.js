@@ -25,6 +25,10 @@ export default function Mesas(){
         router.push("../laboratorio")
     }
 
+    function moverL(){
+        router.push("../login")
+    }
+
     function traerMesas(){
       fetch("http://localhost:4000/traeMesas",
           {
@@ -52,11 +56,6 @@ export default function Mesas(){
 
     return(
         <>
-          <Button
-            className={styles.Crear}
-            onClick={moverC}
-            text={"Crear Mesa"}
-          ></Button>
             {estadoMesa.length != 0 && estadoMesa.map((estadoM)=>{
             console.log("Estado: ",estadoM)
             if(estadoM.estado == "Deshabiltado"){
@@ -78,6 +77,22 @@ export default function Mesas(){
           )
         })
         }
+        <div className={styles.Div}>
+          <Button
+            className={styles.Unirse}
+            text={"Unirse a la mesa"}>
+          </Button>
+          <Button
+            className={styles.Crear}
+            onClick={moverC}
+            text={"Crear Mesa"}
+          ></Button>
+          <Button
+            className={styles.Cerrar}
+            onClick={moverL}
+            text={"Cerrar sesion"}>
+          </Button>
+        </div>
         </>
     )
 }
