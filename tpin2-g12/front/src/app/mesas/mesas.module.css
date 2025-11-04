@@ -11,7 +11,7 @@
     color: #272e47;
     border-radius: 20px;
     border: solid #272e47 2px;
-    max-width: 30%;
+    max-width: 25%;
     max-height: 30%;
     padding: 20px;
 }
@@ -19,15 +19,14 @@
 .Div {
   display: flex;
   flex-direction: row;
-  margin-left: 25vw;
+  margin-left: 27vw;
   gap: 10vw;
   transform: translateY(15vw);
   background-color: #272e47;
   border: solid 5px #3d4b7e;
   border-radius: 20PX;
   padding: 40PX;
-  max-width: 50VW;
-
+  max-width: 45VW;
 }
 
 .Crear {
