@@ -453,13 +453,14 @@ export default function UNO() {
       </div>
       {valorCartaJugada==valorCartaActual || colorCartaActual == colorCartaJugada || valorCartaJugada == "Color" || valorCartaJugada == "+4" ?
         <Button
-          className={styles.habilitarJugar}
+          className={styles.Jugar}
           text={"Jugar Carta"}
           onClick={Jogar()}
         ></Button>
         :
         <Button
-          className={styles.deshabilitarJugar}
+          className={styles.Jugar}
+          text={"Jugar Carta"}
         ></Button>
       }
       {mano.length == 1 ?

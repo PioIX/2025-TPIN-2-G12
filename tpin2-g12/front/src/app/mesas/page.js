@@ -52,6 +52,10 @@ export default function Mesas(){
       function moverC(){
           router.push("../laboratorio")
       }
+      
+      function moverL(){
+        router.push("../login")
+    }
 
       function UnirseMesa(){
         if(estadoMesa=="UNO"){
@@ -82,7 +86,7 @@ export default function Mesas(){
           ></Button>
           <Button
             className={styles.Crear}
-            onClick={cerrarSesion}
+            onClick={moverL}
             text={"Cerrar Sesión"}
           ></Button>
         </div>
@@ -98,6 +102,5 @@ export default function Mesas(){
             text={"Unirse a la Mesa"}
           ></FormUnion>
         }
-        </>
-    )
-}
+  </>
+)

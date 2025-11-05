@@ -37,6 +37,9 @@ export default function Laboratorio(){
             router.replace(`../blackjack?limite=${limit}`)
         } else {alert("Modo inexistente, los modos son Uno o Blackjack")}
     }
+    function volver(){
+        router.push("../mesas");
+    }
 
     function crearMesa(datos){
         if(codigoMesa != "" || modo != "" || limite != "" || loguedUser != ""){
@@ -77,8 +80,9 @@ export default function Laboratorio(){
     return(
     <>
         <Button
+        onClick={volver}
         className={styles.Boton}
-        text="<"
+        text="Volver"
         ></Button>
         <div className={styles.Div}>
             <FormR
