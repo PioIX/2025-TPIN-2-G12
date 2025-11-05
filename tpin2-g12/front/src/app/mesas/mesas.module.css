@@ -124,3 +124,11 @@
 .Unirse:after {
   transform: scale(0.9);
 }
+
+h2 {
+    font-size: 30px;
+    background: linear-gradient(#a99ae3, #5931f8);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: white;
+}

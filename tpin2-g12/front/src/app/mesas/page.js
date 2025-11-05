@@ -13,11 +13,11 @@ export default function Mesas(){
     const [estadoMesa, setEstadoMesa] = useState("");
     const [ID_Mesa, setID_Mesa] = useState("");
     const [limite, setLimite] = useState(0);
-    const [showModal, setShowModal] = useState(false);
+    const [mostrarModal, setMostrarModal] = useState(false);
     
-    useEffect(()=>{
+    /*useEffect(()=>{
       traerMesas()
-    }, []);
+    }, []);*/
     
     function traerMesas(){
       fetch("http://localhost:4000/traeMesas",
@@ -40,9 +40,6 @@ export default function Mesas(){
         )
       }
       
-      function errao(){
-          alert("Mesa Deshabiltada por el Momento")
-      }
       function moverU(){
           router.push(`../uno?limite=${limite}`)
       }
@@ -96,7 +93,7 @@ export default function Mesas(){
         <div className={styles.Div}>
           <Button
             className={styles.Crear}
-            onClick={setShowModal(true)}
+            onClick={()=> setMostrarModal(true)}
             text={"Unirse a la Mesa"}
           ></Button>
           <Button
@@ -110,7 +107,7 @@ export default function Mesas(){
             text={"Cerrar Sesión"}
           ></Button>
         </div>
-        {showModal &&
+        {mostrarModal == true &&
           <FormUnion
             h2={"Ingrese el ID de la mesa"}
             classNameI={styles.Input}
