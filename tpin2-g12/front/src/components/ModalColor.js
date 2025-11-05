@@ -1,31 +1,35 @@
 "use client"
 
 import Button from "./Button"
+import styles from "@/components/ModalColor.module.css"
 
 export default function ModalColor(props){
     return(
         <>
-            <div className="modal">
-                <div className="overlay">
+            <div className={styles.modal}>
+                <div className={styles.overlay}>
+                    <h1
+                        className={styles.titulo}
+                    >Seleccionar color</h1>
                     <Button
-                        className={props.className}
+                        className={styles.Rojo}
                         onClick={props.onClick1}
-                        text={"Rojo"}
+                        text={""}
                     ></Button>
                     <Button
-                        className={props.className}
+                        className={styles.Azul}
                         onClick={props.onClick2}
-                        text={"Azul"}
+                        text={""}
                     ></Button>
                     <Button
-                        className={props.className}
+                        className={styles.Amarillo}
                         onClick={props.onClick3}
-                        text={"Amarillo"}
+                        text={""}
                     ></Button>
                     <Button
-                        className={props.className}
+                        className={styles.Verde}
                         onClick={props.onClick4}
-                        text={"Verde"}
+                        text={""}
                     ></Button>
                 </div>
             </div>

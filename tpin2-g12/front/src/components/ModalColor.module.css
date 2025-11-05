@@ -1,0 +1,88 @@
+.modal {
+    background-color: #272e47;
+    border: solid 5px #3d4b7e;
+    padding: 60px;
+    max-width: 37vw;
+    border-radius: 20px;
+    transform: translate(85%, 20%);
+}
+
+.titulo {
+    font-family: lexend;
+    margin-bottom: -30px;
+    font-size: 50px;
+    background: linear-gradient(#a99ae3, #5931f8);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: white;
+}
+
+.overlay {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 95px;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.Rojo, .Azul, .Amarillo, .Verde {
+    width: 6vw;
+    height: 6vw;
+    border-radius: 20%;
+    border: solid 3px;
+}
+
+.Rojo {
+    background: #d41c1c;
+    background: linear-gradient(rgba(212, 28, 28, 1) 0%, rgba(235, 52, 149, 1) 100%);
+    border-color: rgb(87, 14, 14);
+    transition-duration: 0.2s;
+}
+
+.Azul {
+    background: rgb(48, 107, 236);
+    background: linear-gradient(rgb(48, 107, 236) 0%, rgb(87, 243, 248) 100%);
+    border-color: rgb(14, 37, 87);
+    transition-duration: 0.2s;
+}
+
+.Amarillo {
+    background-color: rgb(236, 186, 48);
+    background: linear-gradient(rgb(236, 186, 48) 0%, rgb(253, 212, 159) 100%);
+    border-color: rgb(105, 56, 10);
+    transition-duration: 0.2s;
+}
+
+.Verde {
+    background-color: rgb(85, 236, 48);
+    background: linear-gradient(rgb(85, 236, 48) 0%, rgb(217, 255, 145) 100%);
+    border-color: rgb(10, 59, 10);
+    transition-duration: 0.2s;
+}
+
+.Rojo:hover, .Azul:hover, .Amarillo:hover, .Verde:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.Rojo:active, .Azul:active, .Amarillo:active, .Verde:active {
+    transform: scale(0.9);
+}
+
+.Rojo:hover {
+    box-shadow: 4px 4px 35px #c44c7e, -4px -4px 35px #c44c7e;
+}
+
+.Azul:hover {
+    box-shadow: 4px 4px 35px #3567d4, -4px -4px 35px #3567d4;
+}
+
+.Amarillo:hover {
+    box-shadow: 4px 4px 35px #ecea62, -4px -4px 35px #ecea62;
+}
+
+.Verde:hover {
+    box-shadow: 4px 4px 35px #67dd6d, -4px -4px 35px #67dd6d;
+}
