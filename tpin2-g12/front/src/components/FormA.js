@@ -4,7 +4,7 @@ import Input from "./Input";
 import Button from "./Button";
 import Desplegable from "./Desplegable";
 
-export default function Form(props){
+export default function FormA(props){
     return(
         <>
             <h2 className={props.classNameH2}>{props.contentH2}</h2>
