@@ -2,12 +2,11 @@
 
 import styles from "@/app/admin/admin.module.css"
 import Button from "@/components/Button"
-import Desplegable from "@/components/Desplegable"
 import FormA from "@/components/FormA"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 
-export default function admin() {
+export default function admin(){
     const router = useRouter()
     const [tipoMod, setTipoMod] = useState("")
     const [mailMod, setMailMod] = useState("")
@@ -50,7 +49,7 @@ export default function admin() {
         console.log(mesaState)
     }
 
-    function actualizar(datos){
+    function actualizarPlayer(datos){
         if(tipoMod == "Modificar mail"){
             fetch("http://localhost:4000/cMail",
             {
@@ -108,7 +107,7 @@ export default function admin() {
         }
     }
 
-    function actualiza() {
+    function actualiza(){
     if(mailMod == undefined || cambioPlayer == undefined || tipoMod == undefined){
         return alert("Error, faltan datos")
     }
@@ -116,9 +115,9 @@ export default function admin() {
         cambio: cambioPlayer,
         id: mailMod
     }
-    actualizar(datos)}
+    actualizarPlayer(datos)}
 
-    function borrar(datos){
+    function borrarPlayer(datos){
         if(delPlayer != ""){
             fetch("http://localhost:4000/dPlayer",
             {
@@ -140,16 +139,45 @@ export default function admin() {
         }
     }
 
-    function borra() {
+    function borra(){
     if(delPlayer == undefined){
         return alert("Error, faltan datos")
     }
     let datos = {
         id: delPlayer,
     }
-    borrar(datos)}
+    borrarPlayer(datos)}
 
-    
+    function actualizarMesa(datos){
+        if(mesaState != ""){
+            fetch("http://localhost:4000/actEstMesa",
+            {
+                method:"PUT", 
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(response => response.json())
+            .then(result =>{
+                console.log(result)
+                if (result.validar == true){
+                    return alert("Juego cambiado exitosamente")
+                } else {
+                    return alert("La Cagaste")
+                }}
+            )
+        }
+    }
+
+    function actMesa(){
+    if(mesaState == undefined){
+        return alert("Error, faltan datos")
+    }
+    let datos = {
+        id: mesaState,
+    }
+    actualizarMesa(datos)}
 
     return(
         <>
