@@ -148,9 +148,36 @@ export default function admin(){
     }
     borrarPlayer(datos)}
 
-    function actMesa(){
-        console.log(mesaState)
+    function actualizarMesa(datos){
+        if(mesaState != ""){
+            fetch("http://localhost:4000/actEstMesa",
+            {
+                method:"PUT", 
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(response => response.json())
+            .then(result =>{
+                console.log(result)
+                if (result.validar == true){
+                    return alert("Juego cambiado exitosamente")
+                } else {
+                    return alert("La Cagaste")
+                }}
+            )
+        }
     }
+
+    function actMesa(){
+    if(mesaState == undefined){
+        return alert("Error, faltan datos")
+    }
+    let datos = {
+        id: mesaState,
+    }
+    actualizarMesa(datos)}
 
     return(
         <>

@@ -228,7 +228,7 @@ app.delete('/dPlayer', async function(req,res){
 app.put('/actEstMesa', async function(req,res){
     try {
         console.log(req.body);
-        await realizarQuery(`UPDATE Mesas SET estado = "${req.body.cambio}" WHERE num_mesa = "${req.body.id}"`);
+        await realizarQuery(`UPDATE Mesas SET status = "${req.body.cambio}" WHERE id_mesa = "${req.body.id}"`);
         res.send({validar:true})
     } catch (error) {
         res.send({validar:false})
@@ -247,14 +247,28 @@ app.post('/traeMesas', async function(req,res){
     }
 })
 
+app.post('/existeMesa', async function(req,res){
+    try {
+        let vector = await realizarQuery(`SELECT status, limite_max FROM Mesas WHERE id_mesa = "${req.body.num_mesa}" `);
+        console.log("mesas: ", vector);
+        if(vector.length == 0){
+            res.send({validar:false})
+        } else {
+            res.send({validar:true}, {estado:vector[0].status}, {limite:vector[0].limite_max})
+        }
+    } catch (error) {
+        res.send({validar:false})
+    }
+})
+
 // Laboratorio
 
 app.post('/crearMesa',async function(req,res){
     try {
         console.log(req.body);
-        let vector = await realizarQuery(`SELECT * FROM Mesas WHERE num_mesa = "${req.body.num_mesa}"`)
+        let vector = await realizarQuery(`SELECT * FROM Mesas WHERE id_mesa = "${req.body.num_mesa}"`)
         if(vector.length == 0){
-            await realizarQuery(`INSERT INTO Mesas (num_mesa, estado, limite_max, id_owner), VALUES ("${req.body.num_mesa}", "${req.body.estado}", ${req.body.limite_max}, "${req.body.id_owner}")`)
+            await realizarQuery(`INSERT INTO Mesas (id_mesa, status, limite_max, mail), VALUES ("${req.body.num_mesa}", "${req.body.estado}", ${req.body.limite_max}, "${req.body.id_owner}")`)
             res.send({validar:true, code:`${req.body.limite_max}`})
         }
         else{

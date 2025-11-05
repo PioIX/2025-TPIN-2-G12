@@ -10,8 +10,9 @@ import Modal from "@/components/Modal"
 
 export default function Mesas(){
     const router = useRouter();
-    const [estadoMesa, setEstadoMesa] = useState([]);
+    const [estadoMesa, setEstadoMesa] = useState("");
     const [ID_Mesa, setID_Mesa] = useState("");
+    const [limite, setLimite] = useState(0);
     const [showModal, setShowModal] = useState(false);
     
     useEffect(()=>{
@@ -43,10 +44,10 @@ export default function Mesas(){
           alert("Mesa Deshabiltada por el Momento")
       }
       function moverU(){
-          router.push("../uno")
+          router.push(`../uno?limite=${limite}`)
       }
       function moverB(){
-          router.push("../blackjack")
+          router.push(`../blackjack?limite=${limite}`)
       }
   
       function moverC(){
@@ -58,6 +59,25 @@ export default function Mesas(){
     }
 
       function UnirseMesa(){
+        fetch("http://localhost:4000/existeMesa",
+        {
+          method:"POST", 
+          headers: {
+            "Content-Type": "application/json",
+          },
+          //body: JSON.stringify(datos)
+        })
+        .then(response => response.json())
+        .then(result =>{
+          console.log(result)
+          if (result.validar == true){
+            console.log(result.estado)
+            setLimite(result.limite)
+            setEstadoMesa(result.estado)
+          } else {
+            return alert("La Cagaste")
+          }}
+        )
         if(estadoMesa=="UNO"){
           moverU()
         }else if(estadoMesa=="Blackjack"){
@@ -103,4 +123,5 @@ export default function Mesas(){
           ></FormUnion>
         }
   </>
-)
+  )
+}
