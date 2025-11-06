@@ -96,7 +96,7 @@ export default function Mesas(){
         <div className={styles.Div}>
           <Button
             className={styles.Crear}
-            onClick={setShowModal(true)}
+            onClick={() => setShowModal(true)}
             text={"Unirse a la Mesa"}
           ></Button>
           <Button

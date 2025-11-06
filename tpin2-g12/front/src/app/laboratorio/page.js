@@ -31,9 +31,10 @@ export default function Laboratorio(){
     }
 
     function moverMesa(){
-        if(modo.toLowerCase == "uno"){
+        console.log(limit)
+        if(modo.toLowerCase() == "uno"){
             router.replace(`../uno?limite=${limit}`)
-        } else if(modo.toLowerCase == "blackjack"){
+        } else if(modo.toLowerCase() == "blackjack"){
             router.replace(`../blackjack?limite=${limit}`)
         } else {alert("Modo inexistente, los modos son Uno o Blackjack")}
     }
@@ -55,23 +56,24 @@ export default function Laboratorio(){
             .then(result =>{
                 console.log(result)
                 if (result.validar == true){
-                    console.log(result.code[0])
-                    setLimit(result.code[0])
+                    console.log(result.code)
+                    setLimit(result.code)
                 } else {
                     return alert("La Cagaste")
                 }}
             )
+            .then(moverMesa())
         }
-        moverMesa()
     }
 
     function creoMesa() {
     if(codigoMesa == undefined || modo == undefined || limite == undefined || loguedUser == undefined){
         return alert("Error, faltan datos")
     }
+    let a = modo.toLowerCase()
     let datos = {
         num_mesa: codigoMesa,
-        estado: modo,
+        estado: a,
         limite_max: limite,
         id_owner: loguedUser 
     }
