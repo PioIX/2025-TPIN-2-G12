@@ -249,12 +249,15 @@ app.post('/traeMesas', async function(req,res){
 
 app.post('/existeMesa', async function(req,res){
     try {
+        console.log(req.body.num_mesa)
         let vector = await realizarQuery(`SELECT status, limite_max FROM Mesas WHERE id_mesa = "${req.body.num_mesa}" `);
         console.log("mesas: ", vector);
         if(vector.length == 0){
             res.send({validar:false})
         } else {
-            res.send({validar:true}, {estado:vector[0].status}, {limite:vector[0].limite_max})
+            console.log(vector[0].status);
+            console.log(vector[0].limite_max);
+            res.send({validar:true}, {estado:`${vector[0].status}`}, {limite:vector[0].limite_max})
         }
     } catch (error) {
         res.send({validar:false})
