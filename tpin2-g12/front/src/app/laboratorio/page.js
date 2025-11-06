@@ -31,11 +31,11 @@ export default function Laboratorio(){
     }
 
     function moverMesa(){
-        console.log(limit)
+        console.log(limite)
         if(modo.toLowerCase() == "uno"){
-            router.replace(`../uno?limite=${limit}`)
+            router.replace(`../uno?limite=${limite}`)
         } else if(modo.toLowerCase() == "blackjack"){
-            router.replace(`../blackjack?limite=${limit}`)
+            router.replace(`../blackjack?limite=${limite}`)
         } else {alert("Modo inexistente, los modos son Uno o Blackjack")}
     }
     function volver(){
