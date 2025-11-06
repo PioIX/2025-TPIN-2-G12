@@ -8,7 +8,7 @@ export default function FormUnion(props){
     <>
       <div className="modal">
           <div className="overlay">
-            <h2>{props.h2}</h2>
+            <h2 className={props.classNameH2}>{props.h2}</h2>
             <Input
               className={props.classNameI}
               type={props.type}

@@ -108,16 +108,19 @@ export default function Mesas(){
           ></Button>
         </div>
         {mostrarModal == true &&
-          <FormUnion
-            h2={"Ingrese el ID de la mesa"}
-            classNameI={styles.Input}
-            type={"text"}
-            onChange={corrobao}
-            value={ID_Mesa}
-            classNameB={styles.Button}
-            onClick={UnirseMesa}
-            text={"Unirse a la Mesa"}
-          ></FormUnion>
+          <div className={styles.divModal}>
+            <FormUnion
+              h2={"Ingrese el ID de la mesa"}
+              classNameH2={styles.h2}
+              classNameI={styles.Input}
+              type={"text"}
+              onChange={corrobao}
+              value={ID_Mesa}
+              classNameB={styles.Button}
+              onClick={UnirseMesa}
+              text={"Unirse a la Mesa"}
+            ></FormUnion>
+          </div>
         }
   </>
   )

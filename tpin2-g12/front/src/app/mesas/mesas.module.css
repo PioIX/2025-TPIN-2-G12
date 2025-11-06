@@ -6,6 +6,17 @@
   font-style: normal;
 }
 
+  @media screen and (max-width: 768px) {
+
+    .Div {
+        width: 100vw;
+        height: 60vh;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
 .Mesa {
     background-color: #a99ae3;
     color: #272e47;
@@ -20,7 +31,7 @@
   display: flex;
   flex-direction: row;
   margin-left: 26vw;
-  gap: 10vw;
+  gap: 7vw;
   transform: translateY(35vw);
   background-color: #272e47;
   border: solid 5px #3d4b7e;
@@ -57,7 +68,7 @@
   box-shadow: 4px 4px 35px #c44c7e, -4px -4px 35px #c44c7e;
 }
 
-.Crear:after {
+.Crear:active {
   transform: scale(0.9);
 }
 
@@ -89,7 +100,7 @@
   box-shadow: 4px 4px 35px #c44c7e, -4px -4px 35px #c44c7e;
 }
 
-.Cerrar:after {
+.Cerrar:active {
   transform: scale(0.9);
 }
 
@@ -110,7 +121,7 @@
     background: linear-gradient(rgba(212, 28, 28, 1) 0%, rgba(235, 52, 149, 1) 100%);
  margin: 17px;
  font-weight: bold;
- font-size: 15px;
+ font-size: 25px;
  color: aliceblue;
 }
 
@@ -121,14 +132,82 @@
   box-shadow: 4px 4px 35px #c44c7e, -4px -4px 35px #c44c7e;
 }
 
-.Unirse:after {
+.Unirse:active {
   transform: scale(0.9);
 }
 
-h2 {
+.divModal {
+  display: flex;
+  flex-direction: row;
+  margin-left: 26.5vw;
+  gap: 10vw;
+  background-color: #272e47;
+  border: solid 5px #3d4b7e;
+  border-radius: 20PX;
+  padding: 40PX;
+  max-width: 27VW;
+  justify-content: center;
+  transform: translateX(10vw);
+  transition: all 0.2s;
+}
+
+.h2 {
     font-size: 30px;
     background: linear-gradient(#a99ae3, #5931f8);
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: white;
+}
+
+.Input {
+    height: 2vw;
+    width: 20vw;
+    border-radius: 20px;
+    background-color: #7263af;
+    border: solid #7c63dd;
+    margin-left: 10px;
+    margin-top: 25px;
+    font-size: 20px;
+    padding: 5px;
+    font-family: lexend;
+    color: #272e47;
+    transition-duration: 0.2s;
+}
+
+.Input:hover {
+    border: solid white;
+    box-shadow: 2px 2px 10px #7263af, -2px -2px 10px #7263af;
+}
+
+.Button {
+     display: flex;
+ height: 3em;
+ width: 10vw;
+ padding: 15px;
+ align-items: center;
+ justify-content: center;
+ background-color: #ff4b4b4b;
+ border-radius: 3px;
+ letter-spacing: 1px;
+ transition: all 0.2s linear;
+ cursor: pointer;
+ border: none;
+    background: #d41c1c;
+    background: linear-gradient(rgba(212, 28, 28, 1) 0%, rgba(235, 52, 149, 1) 100%);
+ margin-top: 30px;
+ margin-left: 87px;
+ font-weight: bold;
+ font-size: 17px;
+ color: aliceblue;
+}
+
+.Button:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  color: #ffffff;
+  box-shadow: 4px 4px 35px #c44c7e, -4px -4px 35px #c44c7e;
+}
+
+.Button:active {
+ transform: scale(0.9);
 }
