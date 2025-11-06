@@ -33,10 +33,15 @@ export default function UNO() {
   const [ultima, setUltima] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [temporizador, setTemporizador] = useState(false);
-  const mailUser = localStorage.getItem("mailUser");
+  const mailUser = localStorage.getItem("loguedUser");
   const limite = searchParams.get("limite");
+
+  console.log("MAilUser", mailUser);
   
 // Escuchar Socket
+
+useEffect(() => {
+  if (!socket) return
 
   socket.on('jugadorAnterior', (data) => {
     setMailPrevio(data.mailJugado);
@@ -79,6 +84,8 @@ export default function UNO() {
     let cadena= "Gano " + user;
     <Modal mensaje={cadena}></Modal>
   })
+}, [socket])
+  
 
 // UseEffects
 
@@ -90,14 +97,18 @@ export default function UNO() {
   }, [ready]);
 
   useEffect(() => {
-    if (temporaizador == true && mailJugable == mailUser) {
+    if (temporizador == true && mailJugable == mailUser) {
       timer()
     }
   }, [temporizador]);
 
 
     useEffect(() => {
-      let index = cartas.cod_carta.findIndex(x => x.concepto === cartaActual)
+      console.log(cartas);
+      if(cartas.length == 0)
+        return;
+      
+      let index = cartas.findIndex(x => x.cod_carta === cartaActual)
       setImagenCartaActual(cartas[index].imagen)
     }, [cartaActual]);
   
@@ -148,7 +159,7 @@ export default function UNO() {
 // Fetchs
 
   function traerPlayer(datos){
-    if(id != ""){
+    if(datos.id != ""){
       fetch("http://localhost:4000/traerUser",
       {
         method:"POST", 
@@ -173,7 +184,8 @@ export default function UNO() {
 
   function selectPlayer(id){
     if(id == undefined){
-        return alert("Error, faltan datos")
+      alert("Error, faltan datos")
+      return;
     }
     let datos = {
         id: id
@@ -243,6 +255,7 @@ export default function UNO() {
 // Funcionalidad del Juego
 
   function Jogar(carta) {
+    console.log("seba calmate")
     if (colorCartaActual == colorCartaJugada || valorCartaActual == valorCartaJugada || valorCartaJugada == "Color" || valorCartaJugada == "+4"){
       if(cartaPrevia != ""){
         cartas.push(cartaPrevia)
@@ -341,6 +354,7 @@ export default function UNO() {
   }
 
   function agarrarCarta(){
+    console.log("Seba deja la carta")
     let num = getRandomInt(cartas.length - 1)
         for (let x = 0; x < (mano.length); x++) {
           if (num != mano[x]) {
@@ -399,8 +413,9 @@ export default function UNO() {
   }
 
   function mover(){
-    socket.on("Salir");
-    router.push("../mesas")
+    if(socket)
+      socket.emit("Salir");
+      router.push("../mesas")
   }
 
 // Lo que se muestra en Pantalla
@@ -424,17 +439,15 @@ export default function UNO() {
     </div>
     <div className={styles.uiJugador}>
       <Pachero
-        className={"Juan"/*styles.H2*/}
+        className={styles.H2}
         usuario={"usuarioActual"}
         cantCartas={mano.lenght}
       ></Pachero>
       <div className={styles.Div}>
       </div>
-      <Timer
-
-      ></Timer>
+      <Timer></Timer>
       <div className="mano">
-        {mano.length != 0 && mano.map((carta) => {
+        {(mano.length != 0) && mano.map((carta) => {
           {mailUser == mailJugable ?
           <Carta
             className={styles.turno}
@@ -455,7 +468,7 @@ export default function UNO() {
         <Button
           className={styles.Jugar}
           text={"Jugar Carta"}
-          onClick={Jogar()}
+          onClick={Jogar}
         ></Button>
         :
         <Button
@@ -467,7 +480,7 @@ export default function UNO() {
         <Button
           className={styles.habilitarUno}
           text={"UNO!"}
-          onClick={()=> setUltima(true)}
+          onClick={()=> {setUltima(true), console.log(ultima)}}
         ></Button>
         :
         <Button
