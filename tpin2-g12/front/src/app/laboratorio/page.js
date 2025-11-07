@@ -56,8 +56,8 @@ export default function Laboratorio(){
             .then(result =>{
                 console.log(result)
                 if (result.validar == true){
-                    console.log(result.code)
-                    setLimit(result.code)
+                    console.log(result.limit)
+                    setLimit(result.limit)
                 } else {
                     return alert("La Cagaste")
                 }}

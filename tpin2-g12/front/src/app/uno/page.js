@@ -35,8 +35,7 @@ export default function UNO() {
   const [temporizador, setTemporizador] = useState(false);
   const mailUser = localStorage.getItem("loguedUser");
   const limite = searchParams.get("limite");
-
-  console.log("MAilUser", mailUser);
+  const id_Mesa = searchParams.get("id_mesa");
   
 // Escuchar Socket
 
@@ -132,15 +131,21 @@ useEffect(() => {
   })
   
   useEffect(() => {
-    selectPlayer(mailUser)
-    if (!socket) return;
-  
+    if (!socket){
+      console.log("towa")
+      return;
+    }
+    
     socket.on("connect", () => {
       //corre una vez al conectar el socket con el back
-      socket.emit("joinRoom", { room: `chat ${codigoMesa}`, mail: mailUser })
+      socket.emit("joinRoom", { room: id_Mesa, mail: mailUser })
+      selectPlayer(mailUser)
+      console.log(pachero);
       setReady(ready + 1)
+      console.log("ready: ", ready);
       socket.emit("ready", ready)
       turnos.push(mailUser)
+      console.log("turnos: ", turnos);
       socket.emit("turnos", {turnos: turnos})
       socket.emit("jugadorActual", {mailJugado: mailUser})
     })
@@ -148,7 +153,7 @@ useEffect(() => {
   
   useEffect(()=> {
     if (!socket) return;
-    socket.on("joinedRoom", data => {
+      socket.on("joinedRoom", data => {
       if (data.mail != mailUser && mailOwner == mailUser ) {
         turnos.push(data.mail)
       }
