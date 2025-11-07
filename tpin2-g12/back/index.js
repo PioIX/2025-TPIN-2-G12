@@ -257,7 +257,7 @@ app.post('/existeMesa', async function(req,res){
         } else {
             console.log(vector[0].status);
             console.log(vector[0].limite_max);
-            res.send({validar:true}, {estado:`${vector[0].status}`}, {limite:vector[0].limite_max})
+            res.send({validar:true, estado:`${vector[0].status}`, limite:vector[0].limite_max})
         }
     } catch (error) {
         res.send({validar:false})
@@ -273,7 +273,7 @@ app.post('/crearMesa',async function(req,res){
         if(vector.length == 0){
             await realizarQuery(`INSERT INTO Mesas (id_mesa, status, limite_max, mail) VALUES ("${req.body.num_mesa}", "${req.body.estado}", ${req.body.limite_max}, "${req.body.id_owner}")`)
             console.log(req.body.limite_max)
-            res.send({validar:true, code:`${req.body.limite_max}`})
+            res.send({validar:true, limit:`${req.body.limite_max}`})
         }
         else{
             res.send({validar:false});

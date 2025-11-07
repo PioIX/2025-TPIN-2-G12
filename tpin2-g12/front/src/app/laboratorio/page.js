@@ -33,9 +33,9 @@ export default function Laboratorio(){
     function moverMesa(){
         console.log(limite)
         if(modo.toLowerCase() == "uno"){
-            router.replace(`../uno?limite=${limite}`)
+            router.replace(`../uno?limite=${limite}&id_mesa=${codigoMesa}`)
         } else if(modo.toLowerCase() == "blackjack"){
-            router.replace(`../blackjack?limite=${limite}`)
+            router.replace(`../blackjack?limite=${limite}&id_mesa=${codigoMesa}`)
         } else {alert("Modo inexistente, los modos son Uno o Blackjack")}
     }
     function volver(){

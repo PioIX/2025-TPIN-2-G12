@@ -44,10 +44,10 @@ export default function Mesas(){
           alert("Mesa Deshabiltada por el Momento")
       }
       function moverU(){
-          router.push(`../uno?limite=${limite}`)
+          router.push(`../uno?limite=${limite}&id_mesa=${ID_Mesa}`)
       }
       function moverB(){
-          router.push(`../blackjack?limite=${limite}`)
+          router.push(`../blackjack?limite=${limite}&id_mesa=${ID_Mesa}`)
       }
   
       function moverC(){
