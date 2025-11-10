@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import styles from "@/app/uno/uno.module.css"
 
 export default function UNO() {
-  const {socket} = useSocket();
+  const {socket, isConnected} = useSocket();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [cartas, setCartas] = useState([]);
@@ -36,6 +36,7 @@ export default function UNO() {
   const mailUser = localStorage.getItem("loguedUser");
   const limite = searchParams.get("limite");
   const id_Mesa = searchParams.get("id_mesa");
+  const mailOwner = searchParams.get("mailOwner")
   
 // Escuchar Socket
 
@@ -45,7 +46,7 @@ useEffect(() => {
   socket.on('jugadorAnterior', (data) => {
     setMailPrevio(data.mailJugado);
     let index = turnos.findIndex(x => x.concepto === mailUser)
-      if(index= 3){
+      if(index == 3){
         setMailJugable(turnos[1])
       }else{setMailJugable(turnos[index+1])}
     setTemporizador(true)
@@ -136,30 +137,30 @@ useEffect(() => {
       return;
     }
     
-    socket.on("connect", () => {
+    if(isConnected) {
       //corre una vez al conectar el socket con el back
       socket.emit("joinRoom", { room: id_Mesa, mail: mailUser })
-      selectPlayer(mailUser)
-      console.log(pachero);
-      setReady(ready + 1)
+      selectPlayer(mailUser);
+      console.log("user = ", pachero);
+      setReady(prevReady => {
+        let newReady = prevReady + 1;
+        socket.emit("ready", newReady);
+        console.log(newReady, " = 1")
+      });
       console.log("ready: ", ready);
-      socket.emit("ready", ready)
-      turnos.push(mailUser)
-      console.log("turnos: ", turnos);
-      socket.emit("turnos", {turnos: turnos})
-      socket.emit("jugadorActual", {mailJugado: mailUser})
-    })
-  }, [])
-  
-  useEffect(()=> {
-    if (!socket) return;
+      socket.emit("jugadorActual", {mailJugado: mailUser});
       socket.on("joinedRoom", data => {
-      if (data.mail != mailUser && mailOwner == mailUser ) {
-        turnos.push(data.mail)
-      }
+      for (let i=0; i<(turnos.length+1); i++) {
+          if (data.mail != turnos[i]) {
+            turnos.push(data.mail)
+            socket.emit("turnos", {turnos: turnos})
+            return;
+          } else {return;}
+        }
     })
+    }
+  }, [isConnected])
   
-  },[socket])
 
 // Fetchs
 

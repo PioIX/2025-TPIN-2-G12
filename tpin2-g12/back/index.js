@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
             socket.leave(req.session.room);
         req.session.room = data.room;
         socket.join(req.session.room);
-        io.to(req.session.room).emit('joinedRoom', { user: req.session.user, room: req.session.room });
+        io.to(req.session.room).emit('joinedRoom', { mail: req.session.mail, room: req.session.room });
 
         socket.on('pingAll', data => {
             console.log("PING ALL: ", data);
@@ -88,8 +88,8 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.on("jugadorAnterior", (data) => {
-        io.to(req.session.room).emit("jugadorActual", {
+    socket.on("jugadorActual", (data) => {
+        io.to(req.session.room).emit("jugadorAnterior", {
             room: req.session.room,
             mailJugado: data,
         });
@@ -250,14 +250,14 @@ app.post('/traeMesas', async function(req,res){
 app.post('/existeMesa', async function(req,res){
     try {
         console.log(req.body.num_mesa)
-        let vector = await realizarQuery(`SELECT status, limite_max FROM Mesas WHERE id_mesa = "${req.body.num_mesa}" `);
+        let vector = await realizarQuery(`SELECT status, limite_max, mail FROM Mesas WHERE id_mesa = "${req.body.num_mesa}" `);
         console.log("mesas: ", vector);
         if(vector.length == 0){
             res.send({validar:false})
         } else {
             console.log(vector[0].status);
             console.log(vector[0].limite_max);
-            res.send({validar:true, estado:`${vector[0].status}`, limite:vector[0].limite_max})
+            res.send({validar:true, estado:`${vector[0].status}`, limite:vector[0].limite_max, owner:`${vector[0].mail}`})
         }
     } catch (error) {
         res.send({validar:false})

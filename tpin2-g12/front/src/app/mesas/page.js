@@ -12,6 +12,7 @@ export default function Mesas(){
     const router = useRouter();
     const [estadoMesa, setEstadoMesa] = useState("");
     const [ID_Mesa, setID_Mesa] = useState("");
+    const [mailOwner, setMailOwner] = useState("");
     const [limite, setLimite] = useState(0);
     const [showModal, setShowModal] = useState(false);
     
@@ -44,10 +45,10 @@ export default function Mesas(){
           alert("Mesa Deshabiltada por el Momento")
       }
       function moverU(){
-          router.push(`../uno?limite=${limite}&id_mesa=${ID_Mesa}`)
+          router.push(`../uno?limite=${limite}&id_mesa=${ID_Mesa}&mailOwner=${mailOwner}`)
       }
       function moverB(){
-          router.push(`../blackjack?limite=${limite}&id_mesa=${ID_Mesa}`)
+          router.push(`../blackjack?limite=${limite}&id_mesa=${ID_Mesa}&mailOwner=${mailOwner}`)
       }
   
       function moverC(){
@@ -74,6 +75,7 @@ export default function Mesas(){
           if (result.validar == true){
             setLimite(result.limite)
             setEstadoMesa(result.estado)
+            setMailOwner(result.owner)
             console.log(result.estado)
           } else {
             return alert("La Cagaste")
