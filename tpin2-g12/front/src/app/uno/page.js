@@ -139,12 +139,12 @@ useEffect(() => {
     
     if(isConnected) {
       //corre una vez al conectar el socket con el back
-      socket.emit("joinRoom", { room: id_Mesa, mail: mailUser })
+      socket.emit("joinRoom", { room: id_Mesa, mail: mailUser, limte: limite})
       selectPlayer(mailUser);
       console.log("user = ", pachero);
       setReady(prevReady => {
         let newReady = prevReady + 1;
-        socket.emit("ready", newReady);
+        socket.emit("listo", newReady);
         console.log(newReady, " = 1")
       });
       console.log("ready: ", ready);

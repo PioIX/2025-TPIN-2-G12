@@ -49,6 +49,8 @@ io.use((socket, next) => {
 
 // A PARTIR DE ACÁ LOS EVENTOS DEL SOCKET 
 
+let cantidadJugadores = 0;
+
 io.on("connection", (socket) => {
     const req = socket.request;
     socket.on('joinRoom', data => {
@@ -58,6 +60,10 @@ io.on("connection", (socket) => {
         req.session.room = data.room;
         socket.join(req.session.room);
         io.to(req.session.room).emit('joinedRoom', { mail: req.session.mail, room: req.session.room });
+        cantidadJugadores++;
+        if(cantidadJugadores = limite){
+            io.to(req.session.room).emit('salaLlena', { msg: "sala llena", room: req.session.room });
+        }
 
         socket.on('pingAll', data => {
             console.log("PING ALL: ", data);
