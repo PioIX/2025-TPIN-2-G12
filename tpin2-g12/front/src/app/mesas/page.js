@@ -16,9 +16,9 @@ export default function Mesas(){
     const [limite, setLimite] = useState(0);
     const [showModal, setShowModal] = useState(false);
     
-    useEffect(()=>{
+    /*useEffect(()=>{
       traerMesas()
-    }, []);
+    }, []);*/
     
     function traerMesas(){
       fetch("http://localhost:4000/traeMesas",

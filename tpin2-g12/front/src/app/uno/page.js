@@ -28,8 +28,8 @@ export default function UNO() {
   const [valorCartaJugada, setValorCartaJugada] = useState("");
   const [ImagenCartaActual, setImagenCartaActual] = useState("");
   const [pachero, setPachero] = useState("");
-  const [ready, setReady] = useState(0);
   const [cant, setCant] = useState(0);
+  const [ready, setReady] = useState(false);
   const [ultima, setUltima] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [temporizador, setTemporizador] = useState(false);
@@ -52,8 +52,8 @@ useEffect(() => {
     setTemporizador(true)
   });
 
-  socket.on("listo", (data)=>{
-    setReady(data.listos)
+  socket.on("salaLlena", (data)=>{
+    setReady(data.ready)
   })
 
   socket.on("selectCartas", (data)=>{
@@ -73,13 +73,13 @@ useEffect(() => {
     }
   })
 
-  socket.on("ultima", (data)=>{
+  socket.on("uno", (data)=>{
     let user = data;
     let cadena= user + " dijo UNO!";
     <Modal mensaje={cadena}></Modal>
   })
 
-  socket.on("ganador", (data)=>{
+  socket.on("gano", (data)=>{
     let user = data;
     let cadena= "Gano " + user;
     <Modal mensaje={cadena}></Modal>
@@ -90,7 +90,7 @@ useEffect(() => {
 // UseEffects
 
   useEffect(() => {
-    if (ready == limite) {
+    if (ready == true) {
       traerCartas()
       repartija()
     }
@@ -113,25 +113,6 @@ useEffect(() => {
     }, [cartaActual]);
   
   useEffect(() => {
-    if(mano.length == 1 && ultima == false){
-      for (let i = 0; i < cant; i++) {
-        let num = getRandomInt(cartas.length + 1)
-        for (let x = 0; x < (mano.length); x++) {
-          if (num != mano[x]) {
-            mano.push(num)
-            cartas.splice(num, 1)
-          }
-        }
-      }
-      socket.emit("enviar_cartas", cartas)
-      return;
-    }else if(mano.length == 1 && ultima == true){
-      socket.emit("gano", {ganador: usuarioActual})
-      return;
-    }else{return;}
-  })
-  
-  useEffect(() => {
     if (!socket){
       console.log("towa")
       return;
@@ -139,15 +120,8 @@ useEffect(() => {
     
     if(isConnected) {
       //corre una vez al conectar el socket con el back
-      socket.emit("joinRoom", { room: id_Mesa, mail: mailUser, limte: limite})
+      socket.emit("joinRoom", { room: id_Mesa, mail: mailUser, limite: limite})
       selectPlayer(mailUser);
-      console.log("user = ", pachero);
-      setReady(prevReady => {
-        let newReady = prevReady + 1;
-        socket.emit("listo", newReady);
-        console.log(newReady, " = 1")
-      });
-      console.log("ready: ", ready);
       socket.emit("jugadorActual", {mailJugado: mailUser});
       socket.on("joinedRoom", data => {
       for (let i=0; i<(turnos.length+1); i++) {
@@ -178,8 +152,16 @@ useEffect(() => {
       .then(result =>{
         console.log(result)
         if (result.validar == true){
-          setPachero(result.user[0].usuario)
+          console.log(result.user)
+          console.log(result.user[0].username)
+          let valor = result.user[0].username
+          console.log(valor)
+          setPachero(valor)
           console.log(pachero)
+          
+          if(pachero == undefined || pachero == ""){
+            console.log("El fetch es una bosta")
+          }else{(console.log("user ", pachero))}
           return;
         } else {
           return alert("La Cagaste")
@@ -249,7 +231,7 @@ useEffect(() => {
   }
 
   function selectCarta(id){
-    if(id == undefined){
+    if(id == undefined || id == ""){
         return alert("Error, faltan datos")
     }
     let datos = {
@@ -332,11 +314,11 @@ useEffect(() => {
       socket.emit("enviar_cartas", cartas)
       return;
       }else if(mano.length == 1 && ultima == true){
-        socket.emit("uno", {player: mailUser})
+        socket.emit("ultima", {player: mailUser})
         return;
       }
-      if(mano.lenght=0){
-        socket.emit("gano", {ganador: pachero})
+      else if(mano.lenght==0){
+        socket.emit("ganador", {ganador: pachero})
       }
       return;
     } else{alert("Error esa carta no se puede jugar")}
