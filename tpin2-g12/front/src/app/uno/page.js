@@ -27,7 +27,6 @@ export default function UNO() {
   const [valorCartaActual, setValorCartaActual] = useState("");
   const [valorCartaJugada, setValorCartaJugada] = useState("");
   const [ImagenCartaActual, setImagenCartaActual] = useState("");
-  const [pachero, setPachero] = useState("");
   const [cant, setCant] = useState(0);
   const [ready, setReady] = useState(false);
   const [ultima, setUltima] = useState(false);
@@ -36,7 +35,8 @@ export default function UNO() {
   const mailUser = localStorage.getItem("loguedUser");
   const limite = searchParams.get("limite");
   const id_Mesa = searchParams.get("id_mesa");
-  const mailOwner = searchParams.get("mailOwner")
+  const mailOwner = searchParams.get("mailOwner");
+  let player = "";
   
 // Escuchar Socket
 
@@ -154,14 +154,10 @@ useEffect(() => {
         if (result.validar == true){
           console.log(result.user)
           console.log(result.user[0].username)
-          let valor = result.user[0].username
-          console.log(valor)
-          setPachero(valor)
-          console.log(pachero)
-          
-          if(pachero == undefined || pachero == ""){
+          player = result.user[0].username
+          if(player == undefined || player == ""){
             console.log("El fetch es una bosta")
-          }else{(console.log("user ", pachero))}
+          }else{(console.log("user ", player))}
           return;
         } else {
           return alert("La Cagaste")
@@ -208,26 +204,24 @@ useEffect(() => {
   }
 
   function traerCartas(){
-    if(id != ""){
-      fetch("http://localhost:4000/traerUno",
-      {
-        method:"POST", 
-        headers: {
-            "Content-Type": "application/json",
-        },
-      })
-      .then(response => response.json())
-      .then(result =>{
-        console.log(result)
-        if (result.validar == true){
-          setCartas(result.mazo)
-          console.log(cartas)
-          return;
-        } else {
-          return alert("La Cagaste")
-        }}
-      )
-    }
+    fetch("http://localhost:4000/traerUno",
+    {
+      method:"POST", 
+      headers: {
+          "Content-Type": "application/json",
+      },
+    })
+    .then(response => response.json())
+    .then(result =>{
+      console.log(result)
+      if (result.validar == true){
+        setCartas(result.mazo)
+        console.log(cartas)
+        return;
+      } else {
+        return alert("La Cagaste")
+      }}
+    )
   }
 
   function selectCarta(id){
@@ -317,7 +311,7 @@ useEffect(() => {
         socket.emit("ultima", {player: mailUser})
         return;
       }
-      else if(mano.lenght==0){
+      else if(mano.length==0){
         socket.emit("ganador", {ganador: pachero})
       }
       return;
@@ -428,8 +422,8 @@ useEffect(() => {
     <div className={styles.uiJugador}>
       <Pachero
         className={styles.H2}
-        usuario={"usuarioActual"}
-        cantCartas={mano.lenght}
+        usuario={player}
+        cantCartas={mano.length}
       ></Pachero>
       <div className={styles.Div}>
       </div>
