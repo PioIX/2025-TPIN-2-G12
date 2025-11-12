@@ -91,7 +91,9 @@ useEffect(() => {
 
   useEffect(() => {
     if (ready == true) {
+      console.log("ready ta bien")
       traerCartas()
+      //Preguntar como activarlo dps de traerCartas
       repartija()
     }
   }, [ready]);
@@ -212,9 +214,11 @@ useEffect(() => {
       },
     })
     .then(response => response.json())
+    .then("llegue a medio fetch")
     .then(result =>{
       console.log(result)
       if (result.validar == true){
+        //preguntar como pasar un vector a un state vector
         setCartas(result.mazo)
         console.log(cartas)
         return;
@@ -347,6 +351,7 @@ useEffect(() => {
   }
 
   function repartija() {
+    console.log("Repartiendo errores")
     let actual = 0
     for(let y = 0; y <= turnos.length;  y++){
       if(turnos[y]==mailPrevio){

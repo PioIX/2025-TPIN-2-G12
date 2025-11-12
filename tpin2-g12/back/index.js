@@ -60,7 +60,9 @@ io.on("connection", (socket) => {
         req.session.room = data.room;
         socket.join(req.session.room);
         io.to(req.session.room).emit('joinedRoom', { mail: req.session.mail, room: req.session.room });
+        console.log("arranca asi:", cantidadJugadores)
         cantidadJugadores++;
+        console.log("setea esto:", cantidadJugadores)
         if(cantidadJugadores == data.limite){
             io.to(req.session.room).emit('salaLlena', { ready: true, room: req.session.room });
         }
@@ -288,7 +290,6 @@ app.post('/crearMesa',async function(req,res){
 
 app.post('/traerUno',async function(req,res){
     try {
-        console.log(req.body);
         let vector = await realizarQuery(`SELECT * FROM Cartas WHERE baraja = "UNO"`)
         if(vector.length != 0){
             res.send({validar:true, mazo: vector})
