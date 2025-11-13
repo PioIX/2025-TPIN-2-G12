@@ -54,17 +54,23 @@ let cantidadJugadores = 0;
 io.on("connection", (socket) => {
     const req = socket.request;
     socket.on('joinRoom', data => {
-        console.log("🚀 ~ io.on ~ req.session.room:", req.session.room)
-        if (req.session.room != undefined && req.session.room.length > 0)
-            socket.leave(req.session.room);
+        console.log("JoinRoom: ", data)
         req.session.room = data.room;
+        req.session.mail = data.mail;
+        req.session.maximo = data.maximo
+        console.log("🚀 ~ io.on ~ req.session.room:", req.session.room)
+        if (req.session.room == undefined && req.session.room.length <= 0){
+            socket.leave(req.session.room)
+            console.log("Chau")
+            return;
+        }
         socket.join(req.session.room);
         io.to(req.session.room).emit('joinedRoom', { mail: req.session.mail, room: req.session.room });
         console.log("arranca asi:", cantidadJugadores)
         cantidadJugadores++;
         console.log("setea esto:", cantidadJugadores)
-        if(cantidadJugadores == data.limite){
-            io.to(req.session.room).emit('salaLlena', { ready: true, room: req.session.room });
+        if(cantidadJugadores == req.session.maximo){
+            io.to(req.session.room).emit('salaLlena', { ready: true, room: req.session.room }, console.log("Sala LLena"));
         }
 
         socket.on('pingAll', data => {

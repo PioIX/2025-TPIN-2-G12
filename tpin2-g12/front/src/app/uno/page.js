@@ -30,7 +30,10 @@ export default function UNO() {
   const [cant, setCant] = useState(0);
   const [ready, setReady] = useState(false);
   const [ultima, setUltima] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showMensaje, setShowMensaje] = useState(false);
+  const [showColor, setShowColor] = useState(false);
+  const [showGanador, setShowGanador] = useState(false);
+  const [showUno, setShowUno] = useState(false);
   const [temporizador, setTemporizador] = useState(false);
   const mailUser = localStorage.getItem("loguedUser");
   const limite = searchParams.get("limite");
@@ -43,6 +46,8 @@ export default function UNO() {
 useEffect(() => {
   if (!socket) return
 
+  socket.on
+
   socket.on('jugadorAnterior', (data) => {
     setMailPrevio(data.mailJugado);
     let index = turnos.findIndex(x => x.concepto === mailUser)
@@ -53,7 +58,7 @@ useEffect(() => {
   });
 
   socket.on("salaLlena", (data)=>{
-    setReady(data.ready)
+    setReady(data.ready);
   })
 
   socket.on("selectCartas", (data)=>{
@@ -90,19 +95,25 @@ useEffect(() => {
 // UseEffects
 
   useEffect(() => {
-    if (ready == true) {
-      console.log("ready ta bien")
-      traerCartas()
-      //Preguntar como activarlo dps de traerCartas
-      repartija()
-    }
-  }, [ready]);
+  if (ready === true) {
+    const ejecutar = async () => {
+      try {
+        await traerCartas();   // Espera a que termine de traer    // Luego reparte
+      } catch (err) {
+        console.error("Error en el flujo:", err);
+      }
+    };
 
-  useEffect(() => {
-    if (temporizador == true && mailJugable == mailUser) {
+    ejecutar(); // Ejecutamos la función async
+  }
+}, [ready]);
+
+
+  /*useEffect(() => {
+    if (temporizador === true && mailJugable === mailUser) {
       timer()
     }
-  }, [temporizador]);
+  }, [temporizador]);*/
 
 
     useEffect(() => {
@@ -122,10 +133,13 @@ useEffect(() => {
     
     if(isConnected) {
       //corre una vez al conectar el socket con el back
-      socket.emit("joinRoom", { room: id_Mesa, mail: mailUser, limite: limite})
+      console.log(id_Mesa)
+      socket.emit("joinRoom", {room: id_Mesa, mail: mailUser, maximo: limite})
+      //socket.emit("joinRoom", { room: id_Mesa, mail: mailUser, limite: limite})
       selectPlayer(mailUser);
       socket.emit("jugadorActual", {mailJugado: mailUser});
       socket.on("joinedRoom", data => {
+        console.log("Juan Carlos Bodoque")
       for (let i=0; i<(turnos.length+1); i++) {
           if (data.mail != turnos[i]) {
             turnos.push(data.mail)
@@ -205,27 +219,29 @@ useEffect(() => {
     }
   }
 
-  function traerCartas(){
-    fetch("http://localhost:4000/traerUno",
-    {
-      method:"POST", 
-      headers: {
+  async function traerCartas() {
+    try {
+      const response = await fetch("http://localhost:4000/traerUno", {
+        method: "POST",
+        headers: {
           "Content-Type": "application/json",
-      },
-    })
-    .then(response => response.json())
-    .then("llegue a medio fetch")
-    .then(result =>{
-      console.log(result)
-      if (result.validar == true){
-        //preguntar como pasar un vector a un state vector
-        setCartas(result.mazo)
-        console.log(cartas)
-        return;
+        },
+      });
+      console.log("hice fetch bro")
+      const result = await response.json();
+      console.log(result);
+
+      if (result.validar === true) {
+        console.log(result.mazo);
+        setCartas(result.mazo);
+        repartija()
+        console.log("cartitas corrio")
       } else {
-        return alert("La Cagaste")
-      }}
-    )
+        alert("La Cagaste");
+      }
+    } catch (error) {
+      console.error("Error al traer cartas:", error);
+    }
   }
 
   function selectCarta(id){
@@ -283,20 +299,13 @@ useEffect(() => {
       }
       if(valorCartaJugada == "+4"){
         setShowModal(true);
-        {showModal &&
-        <ModalColor
-          className={"ButtonC"}
-          onClick1={()=> {setColorCartaActual("Rojo"); setShowModal(false)}}
-          onClick2={()=> {setColorCartaActual("Azul"); setShowModal(false)}}
-          onClick3={()=> {setColorCartaActual("Amarillo"); setShowModal(false)}}
-          onClick4={()=> {setColorCartaActual("Verde"); setShowModal(false)}}
-        ></ModalColor>
-        let index = turnos.findIndex(x => x.concepto === mailUser)
-        if(index = 3){
-          setMailJugable(turnos[0])
-        }else{setMailJugable(turnos[index+1])}
-        socket.emit("aLevantar", {cartasRestantes: cartas, mailJugable: turnos[index], cant: 4})
-        socket.emit("jugadorActual", {mailJugado: turnos[index]})
+        if(showColor/*Cambiar*/){
+          let index = turnos.findIndex(x => x.concepto === mailUser)
+          if(index = 3){
+            setMailJugable(turnos[0])
+          }else{setMailJugable(turnos[index+1])}
+          socket.emit("aLevantar", {cartasRestantes: cartas, mailJugable: turnos[index], cant: 4})
+          socket.emit("jugadorActual", {mailJugado: turnos[index]})
         }
       }
       if(mano.length == 1 && ultima == false){
@@ -351,37 +360,33 @@ useEffect(() => {
   }
 
   function repartija() {
-    console.log("Repartiendo errores")
-    let actual = 0
-    for(let y = 0; y <= turnos.length;  y++){
-      if(turnos[y]==mailPrevio){
-        if(y==(turnos.length-1)){
-          actual=1
-        } else{actual=y+1}
+    let actual = 0;
+    for (let y = 0; y <= turnos.length; y++) {
+      if (turnos[y] === mailPrevio) {
+        actual = (y === turnos.length - 1) ? 1 : y + 1;
       }
     }
 
-    if (turnos[actual] = mailUser) {
-      for (let i = 0; mano.length < 7; i++) {
-        let num = getRandomInt(cartas.length - 1)
-        for (let x = 0; x < (mano.length); x++) {
-          if (num != mano[x]) {
-            mano.push(cartas[num])
-            cartas.splice(num, 1)
-          }
+    if (turnos[actual] === mailUser) 
+      while (mano.length < 7) {
+        let num = getRandomInt(cartas.length - 1);
+        if (!mano.includes(cartas[num])) {
+          mano.push(cartas[num]);
+          cartas.splice(num, 1);
         }
       }
-      let pepe = getRandomInt(cartas.length-1)
-      setCartaActual(cartas[pepe].cod_carta)
-      setColorCartaActual(cartas[pepe].color)
-      setValorCartaActual(cartas[pepe].valor)
-      socket.emit("enviar_cartas", cartas)
-      socket.emit("jugadorActual", mailUser)
-    }
-  };
+
+    let pepe = getRandomInt(cartas.length - 1);
+    setCartaActual(cartas[pepe].cod_carta);
+    setColorCartaActual(cartas[pepe].color);
+    setValorCartaActual(cartas[pepe].valor);
+    socket.emit("enviar_cartas", cartas);
+    socket.emit("jugadorActual", mailUser);
+  }
 
   function timer() {
-    let tiempoRestante = 300; // 5 minutos
+    console.log("Hoña")
+    /*let tiempoRestante = 300; // 5 minutos
     const temporizador = setInterval(() => {
       // Muestra el tiempo restante
       console.log(`Tiempo restante: ${tiempoRestante} segundos`);
@@ -395,8 +400,7 @@ useEffect(() => {
         alert('¡Tiempo terminado!');
         cambioTurno();
       }
-    }, 1000); // 1000 milisegundos = 1 segundo
-
+    }, 1000); // 1000 milisegundos = 1 segundo*/
   }
 
   function mover(){
@@ -475,6 +479,15 @@ useEffect(() => {
         ></Button>
         }
     </div>
+    {showModalColor &&
+        <ModalColor
+          className={"ButtonC"}
+          onClick1={()=> {setColorCartaActual("Rojo"); setShowModal(false)}}
+          onClick2={()=> {setColorCartaActual("Azul"); setShowModal(false)}}
+          onClick3={()=> {setColorCartaActual("Amarillo"); setShowModal(false)}}
+          onClick4={()=> {setColorCartaActual("Verde"); setShowModal(false)}}
+        ></ModalColor>
+      }
     </>
   );
 }
