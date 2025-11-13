@@ -27,10 +27,10 @@ export default function UNO() {
   const [valorCartaActual, setValorCartaActual] = useState("");
   const [valorCartaJugada, setValorCartaJugada] = useState("");
   const [ImagenCartaActual, setImagenCartaActual] = useState("");
+  const [cadena, setCadena] = useState("");
   const [cant, setCant] = useState(0);
   const [ready, setReady] = useState(false);
   const [ultima, setUltima] = useState(false);
-  const [showMensaje, setShowMensaje] = useState(false);
   const [showColor, setShowColor] = useState(false);
   const [showGanador, setShowGanador] = useState(false);
   const [showUno, setShowUno] = useState(false);
@@ -80,14 +80,12 @@ useEffect(() => {
 
   socket.on("uno", (data)=>{
     let user = data;
-    let cadena= user + " dijo UNO!";
-    <Modal mensaje={cadena}></Modal>
+    setCadena(user, " dijo UNO!")
   })
 
   socket.on("gano", (data)=>{
     let user = data;
-    let cadena= "Gano " + user;
-    <Modal mensaje={cadena}></Modal>
+    setCadena(user, " gano")
   })
 }, [socket])
   
@@ -285,21 +283,13 @@ useEffect(() => {
         socket.emit("jugadorActual", {mailJugado: turnos[index]})
       }
       if(valorCartaJugada == "Color"){
-        setShowModal(true);
-        {showModal &&
-        <ModalColor
-          className={"ButtonC"}
-          onClick1={()=> {setColorCartaActual("Rojo"); setShowModal(false)}}
-          onClick2={()=> {setColorCartaActual("Azul"); setShowModal(false)}}
-          onClick3={()=> {setColorCartaActual("Amarillo"); setShowModal(false)}}
-          onClick4={()=> {setColorCartaActual("Verde"); setShowModal(false)}}
-        ></ModalColor>
-        }
+        setShowColor(true);
+    
         socket.emit("jugadorActual", {mailJugado: mailUser})
       }
       if(valorCartaJugada == "+4"){
-        setShowModal(true);
-        if(showColor/*Cambiar*/){
+        setShowColor(true);
+        if(showColor){
           let index = turnos.findIndex(x => x.concepto === mailUser)
           if(index = 3){
             setMailJugable(turnos[0])
@@ -479,7 +469,7 @@ useEffect(() => {
         ></Button>
         }
     </div>
-    {showModalColor &&
+    {showColor &&
         <ModalColor
           className={"ButtonC"}
           onClick1={()=> {setColorCartaActual("Rojo"); setShowModal(false)}}
@@ -488,6 +478,12 @@ useEffect(() => {
           onClick4={()=> {setColorCartaActual("Verde"); setShowModal(false)}}
         ></ModalColor>
       }
+    {showGanador &&
+      <Modal mensaje={cadena}></Modal>
+    }
+    {showUno &&
+      <Modal mensaje={cadena}></Modal>
+    }
     </>
   );
 }
