@@ -235,11 +235,10 @@ useEffect(()=>{
       console.log("hice fetch bro")
       const result = await response.json();
       console.log(result);
-
-      if (result.validar === true) {
+      if (result.validar) {
         console.log(result.mazo);
         setCartas(result.mazo);
-        repartija()
+        repartija(result.mazo)
         console.log("cartitas corrio")
       } else {
         alert("La Cagaste");
@@ -253,6 +252,7 @@ useEffect(()=>{
     if(id == undefined || id == ""){
         return alert("Error, faltan datos")
     }
+    console.log("Carta epica: ", id)
     let datos = {
         id: id
     }
@@ -356,8 +356,8 @@ useEffect(()=>{
         }
   }
 
-  function repartija() {
-    console.log(cartas)
+  function repartija(mazo) {
+    console.log(mazo)
     let actual = 0;
     for (let y = 0; y <= turnos.length; y++) {
       if (turnos[y] === mailPrevio) {
@@ -367,20 +367,22 @@ useEffect(()=>{
 
     if (turnos[actual] === mailUser) 
       while (mano.length < 7) {
-        let num = getRandomInt(cartas.length - 1);
-        if (!mano.includes(cartas[num])) {
-          mano.push(cartas[num]);
-          cartas.splice(num, 1);
+        let num = getRandomInt(mazo.length - 1);
+        if (!mano.includes(mazo[num])) {
+          mano.push(mazo[num]);
+          mazo.splice(num, 1);
         }
       }
 
-    let pepe = getRandomInt(cartas.length - 1);
+      console.log(cartas)
+    let pepe = getRandomInt(mazo.length - 1);
     console.log("pepe: ", pepe)
-    console.log(cartas[1].cod_carta)
-    setCartaActual(cartas[pepe].cod_carta);
-    setColorCartaActual(cartas[pepe].color);
-    setValorCartaActual(cartas[pepe].valor);
-    socket.emit("enviar_cartas", cartas);
+    console.log(mazo[1].cod_carta)
+    setCartaActual(mazo[pepe].cod_carta);
+    setColorCartaActual(mazo[pepe].color);
+    setValorCartaActual(mazo[pepe].valor);
+    socket.emit("enviar_cartas", {room: id_Mesa, cartas: mazo});
+    //socket.emit("enviar_cartas", cartas);
     socket.emit("jugadorActual", mailUser);
   }
 
@@ -443,7 +445,7 @@ useEffect(()=>{
           <Carta
             className={styles.turno}
             id={carta.cod_carta}
-            onClick={selectCarta(carta.cod_carta)}
+            onClick={()=> selectCarta(carta.cod_carta)}
             img={carta.imagen}
           ></Carta>
           :

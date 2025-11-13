@@ -97,8 +97,8 @@ io.on("connection", (socket) => {
 
     socket.on("enviar_cartas", (data) => {
         io.to(req.session.room).emit("selectCartas", {
-            room: realizarQuery.session.room,
-            cartasRestantes: data,
+            room: data.room,
+            cartasRestantes: data.cartas,
         });
     });
 
