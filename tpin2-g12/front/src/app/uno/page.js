@@ -40,6 +40,7 @@ export default function UNO() {
   const id_Mesa = searchParams.get("id_mesa");
   const mailOwner = searchParams.get("mailOwner");
   let player = "";
+  let mazo = [];
   
 // Escuchar Socket
 
@@ -105,6 +106,12 @@ useEffect(() => {
     ejecutar(); // Ejecutamos la función async
   }
 }, [ready]);
+
+useEffect(()=>{
+
+  console.log("cartas state: ", cartas)
+
+},[cartas])
 
 
   /*useEffect(() => {
@@ -350,6 +357,7 @@ useEffect(() => {
   }
 
   function repartija() {
+    console.log(cartas)
     let actual = 0;
     for (let y = 0; y <= turnos.length; y++) {
       if (turnos[y] === mailPrevio) {
@@ -367,6 +375,8 @@ useEffect(() => {
       }
 
     let pepe = getRandomInt(cartas.length - 1);
+    console.log("pepe: ", pepe)
+    console.log(cartas[1].cod_carta)
     setCartaActual(cartas[pepe].cod_carta);
     setColorCartaActual(cartas[pepe].color);
     setValorCartaActual(cartas[pepe].valor);

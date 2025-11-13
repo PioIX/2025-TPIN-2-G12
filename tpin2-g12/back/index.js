@@ -70,7 +70,7 @@ io.on("connection", (socket) => {
         cantidadJugadores++;
         console.log("setea esto:", cantidadJugadores)
         if(cantidadJugadores == req.session.maximo){
-            io.to(req.session.room).emit('salaLlena', { ready: true, room: req.session.room }, console.log("Sala LLena"));
+            io.to(req.session.room).emit('salaLlena', { ready: true, room: req.session.room }, console.log("Sala LLena"), cantidadJugadores=0);
         }
 
         socket.on('pingAll', data => {
