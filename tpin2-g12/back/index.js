@@ -47,9 +47,18 @@ io.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
 });
 
-// A PARTIR DE ACÁ LOS EVENTOS DEL SOCKET 
 
-let cantidadJugadores = 0;
+const datosRooms = {} 
+
+socket.on('unirseARoom', (roomId) => {
+  socket.join(roomId);
+  
+  if (!datosRooms[roomId]) {
+    datosRooms[roomId] = { contador: 0 };
+  }
+  
+  datosRooms[roomId].contador++;
+});
 
 io.on("connection", (socket) => {
     const req = socket.request;
@@ -91,8 +100,18 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.on("Salir", ()=>{
+    socket.on("expulsionForzada", ()=> {
         socket.leave(req.session.room);
+        cantidadJugadores=0
+    })
+
+    socket.on("Salir", (data)=>{
+        socket.leave(req.session.room);
+        cantidadJugadores--
+        io.to(req.session.room).emit("Salio", {
+            room: req.session.room,
+            traidor: data.mail,
+        })
     })
 
     socket.on("enviar_cartas", (data) => {
@@ -136,6 +155,15 @@ io.on("connection", (socket) => {
         io.to(req.session.room).emit("uno", {
             room: req.session.room,
             player: data,
+        });
+    });
+
+    socket.on("cartaCentral", (data) => {
+        io.to(req.session.room).emit("cartaActual", {
+            room: req.session.room,
+            cod: data.cod,
+            color: data.color,
+            valor: data.valor
         });
     });
 });

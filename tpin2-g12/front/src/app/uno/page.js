@@ -40,18 +40,35 @@ export default function UNO() {
   const id_Mesa = searchParams.get("id_mesa");
   const mailOwner = searchParams.get("mailOwner");
   let player = "";
-  let mazo = [];
   
 // Escuchar Socket
 
 useEffect(() => {
   if (!socket) return
+  
+  socket.on("reparto", (data)=>{
+    if (data.mail === mailUser){
+      console.log("Cartas: ", cartas)
+      repartija(cartas)
+    }
+  })
 
-  socket.on
+  socket.on("Salio", (data)=> {
+    if(data.mail === mailOwner){
+      socket.emit("expulsionForzada");
+      router.push("../mesas")
+    }
+  })
+
+  socket.on("cartaActual", (data) => {
+    setCartaActual(data.cod);
+    setColorCartaActual(data.color);
+    setValorCartaActual(data.valor)
+  })
 
   socket.on('jugadorAnterior', (data) => {
     setMailPrevio(data.mailJugado);
-    let index = turnos.findIndex(x => x.concepto === mailUser)
+    let index = turnos.findIndex(x => x.turnos[i] === mailUser)
       if(index == 3){
         setMailJugable(turnos[1])
       }else{setMailJugable(turnos[index+1])}
@@ -81,12 +98,14 @@ useEffect(() => {
 
   socket.on("uno", (data)=>{
     let user = data;
-    setCadena(user, " dijo UNO!")
+    setCadena(user, " dijo UNO!");
+    setShowUno(true)
   })
 
   socket.on("gano", (data)=>{
     let user = data;
-    setCadena(user, " gano")
+    setCadena(user, " gano");
+    setShowGanador(true)
   })
 }, [socket])
   
@@ -238,8 +257,11 @@ useEffect(()=>{
       if (result.validar) {
         console.log(result.mazo);
         setCartas(result.mazo);
-        repartija(result.mazo)
-        console.log("cartitas corrio")
+        if(mailOwner===mailUser){
+          repartija(result.mazo)
+          console.log("cartitas corrio siendo owner")
+        }
+        console.log("cartitas corrio sin ser owner")
       } else {
         alert("La Cagaste");
       }
@@ -357,33 +379,41 @@ useEffect(()=>{
   }
 
   function repartija(mazo) {
-    console.log(mazo)
-    let actual = 0;
-    for (let y = 0; y <= turnos.length; y++) {
-      if (turnos[y] === mailPrevio) {
-        actual = (y === turnos.length - 1) ? 1 : y + 1;
-      }
-    }
-
-    if (turnos[actual] === mailUser) 
-      while (mano.length < 7) {
-        let num = getRandomInt(mazo.length - 1);
-        if (!mano.includes(mazo[num])) {
-          mano.push(mazo[num]);
-          mazo.splice(num, 1);
+      console.log(mazo)
+      let actual = 0;
+      for (let y = 0; y <= turnos.length; y++) {
+        if (turnos[y] === mailPrevio) {
+          actual = (y === turnos.length - 1) ? 1 : y + 1;
         }
       }
 
-      console.log(cartas)
-    let pepe = getRandomInt(mazo.length - 1);
-    console.log("pepe: ", pepe)
-    console.log(mazo[1].cod_carta)
-    setCartaActual(mazo[pepe].cod_carta);
-    setColorCartaActual(mazo[pepe].color);
-    setValorCartaActual(mazo[pepe].valor);
-    socket.emit("enviar_cartas", {room: id_Mesa, cartas: mazo});
-    //socket.emit("enviar_cartas", cartas);
-    socket.emit("jugadorActual", mailUser);
+      if (turnos[actual] === mailUser) 
+        while (mano.length < 7) {
+          let num = getRandomInt(mazo.length - 1);
+          if (!mano.includes(mazo[num])) {
+            mano.push(mazo[num]);
+            mazo.splice(num, 1);
+          }
+        }
+        console.log(cartas)
+      socket.emit("enviar_cartas", {room: id_Mesa, cartas: mazo});
+      socket.emit("jugadorActual", mailUser);
+    if(turnos[limite]=== mailUser){
+      let pepe = getRandomInt(mazo.length - 1);
+      console.log("pepe: ", pepe)
+      console.log(mazo[1].cod_carta)
+      setCartaActual(mazo[pepe].cod_carta);
+      setColorCartaActual(mazo[pepe].color);
+      setValorCartaActual(mazo[pepe].valor);
+      socket.emit("cartaCentral", {cod: cartaActual, color: colorCartaActual, valor: valorCartaActual})
+    }else{
+      let index = turnos.indexOf(mail);
+      if(index != 3){ 
+        setMailJugable(turnos[index+1])
+        socket.emit("repartirSigueinte", {siguiente: mailJugable})
+      }
+      
+    }
   }
 
   function timer() {
@@ -407,7 +437,7 @@ useEffect(()=>{
 
   function mover(){
     if(socket)
-      socket.emit("Salir");
+      socket.emit("Salir", {mail: mailUser});
       router.push("../mesas")
   }
 
@@ -440,22 +470,21 @@ useEffect(()=>{
       </div>
       <Timer></Timer>
       <div className="mano">
-        {(mano.length != 0) && mano.map((carta) => {
-          {mailUser == mailJugable ?
-          <Carta
-            className={styles.turno}
-            id={carta.cod_carta}
-            onClick={()=> selectCarta(carta.cod_carta)}
-            img={carta.imagen}
-          ></Carta>
-          :
-          <Carta
-            className={styles.noTurno}
-            id={carta.id}
-            img={carta.link}
-          ></Carta>
-          }
-        })}
+        {(mano.length != 0) && mano.map((carta) => (
+          mailUser == mailJugable ?
+            <Carta
+              className={styles.turno}
+              id={carta.cod_carta}
+              onClick={() => selectCarta(carta.cod_carta)}
+              img={carta.imagen}
+            />
+            :
+            <Carta
+              className={styles.noTurno}
+              id={carta.cod_carta}
+              img={carta.imagen}
+            />
+        ))}
       </div>
       {valorCartaJugada==valorCartaActual || colorCartaActual == colorCartaJugada || valorCartaJugada == "Color" || valorCartaJugada == "+4" ?
         <Button
