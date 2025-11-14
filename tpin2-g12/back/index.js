@@ -50,15 +50,6 @@ io.use((socket, next) => {
 
 const datosRooms = {} 
 
-socket.on('unirseARoom', (roomId) => {
-  socket.join(roomId);
-  
-  if (!datosRooms[roomId]) {
-    datosRooms[roomId] = { contador: 0 };
-  }
-  
-  datosRooms[roomId].contador++;
-});
 
 io.on("connection", (socket) => {
     const req = socket.request;
@@ -78,6 +69,10 @@ io.on("connection", (socket) => {
         console.log("arranca asi:", cantidadJugadores)
         cantidadJugadores++;
         console.log("setea esto:", cantidadJugadores)
+        if (!datosRooms[roomId]) {
+            datosRooms[roomId] = { contador: 0 };
+        }
+        datosRooms[roomId].contador++;
         if(cantidadJugadores == req.session.maximo){
             io.to(req.session.room).emit('salaLlena', { ready: true, room: req.session.room }, console.log("Sala LLena"), cantidadJugadores=0);
         }
