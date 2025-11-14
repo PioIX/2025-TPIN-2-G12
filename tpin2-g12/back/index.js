@@ -66,15 +66,14 @@ io.on("connection", (socket) => {
         }
         socket.join(req.session.room);
         io.to(req.session.room).emit('joinedRoom', { mail: req.session.mail, room: req.session.room });
-        console.log("arranca asi:", cantidadJugadores)
-        cantidadJugadores++;
-        console.log("setea esto:", cantidadJugadores)
-        if (!datosRooms[roomId]) {
-            datosRooms[roomId] = { contador: 0 };
+        if (!datosRooms[data.room]) {
+            datosRooms[data.room] = { contador: 0 };
         }
-        datosRooms[roomId].contador++;
-        if(cantidadJugadores == req.session.maximo){
-            io.to(req.session.room).emit('salaLlena', { ready: true, room: req.session.room }, console.log("Sala LLena"), cantidadJugadores=0);
+        console.log("arranca asi:", datosRooms[data.room].contador)
+        datosRooms[data.room].contador++;
+        console.log("setea esto:", datosRooms[data.room].contador)
+        if(datosRooms[data.room].contador == req.session.maximo){
+            io.to(req.session.room).emit('salaLlena', { ready: true, room: req.session.room }, console.log("Sala LLena"));
         }
 
         socket.on('pingAll', data => {
@@ -95,19 +94,26 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.on("expulsionForzada", ()=> {
+    socket.on("expulsionForzada", (data)=> {
         socket.leave(req.session.room);
-        cantidadJugadores=0
+        datosRooms[data.room].contador=0
     })
 
-    socket.on("Salir", (data)=>{
-        socket.leave(req.session.room);
-        cantidadJugadores--
-        io.to(req.session.room).emit("Salio", {
-            room: req.session.room,
-            traidor: data.mail,
-        })
-    })
+    socket.on("Salir", (data) => {
+    console.log("Saliendo de:", data.room);
+    console.log("datosRooms antes:", datosRooms[data.room]);
+    if (datosRooms[data.room] && datosRooms[data.room].contador > 0) {
+        datosRooms[data.room].contador--;
+        console.log("Contador después:", datosRooms[data.room].contador);
+    } else {
+        console.log("La sala no existe o contador ya es 0");
+    }
+    socket.leave(data.room);
+    io.to(data.room).emit("Salio", {
+        room: data.room,
+        traidor: data.mail,
+    });
+});
 
     socket.on("enviar_cartas", (data) => {
         io.to(req.session.room).emit("selectCartas", {

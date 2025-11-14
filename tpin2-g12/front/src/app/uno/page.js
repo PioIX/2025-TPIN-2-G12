@@ -55,7 +55,7 @@ useEffect(() => {
 
   socket.on("Salio", (data)=> {
     if(data.mail === mailOwner){
-      socket.emit("expulsionForzada");
+      socket.emit("expulsionForzada", {room: id_Mesa});
       router.push("../mesas")
     }
   })
@@ -67,13 +67,15 @@ useEffect(() => {
   })
 
   socket.on('jugadorAnterior', (data) => {
-    setMailPrevio(data.mailJugado);
-    let index = turnos.findIndex(x => x.turnos[i] === mailUser)
-      if(index == 3){
-        setMailJugable(turnos[1])
-      }else{setMailJugable(turnos[index+1])}
-    setTemporizador(true)
-  });
+  setMailPrevio(data.mailJugado);
+  let index = turnos.findIndex(x => x === mailUser);
+  if(index == 3){
+    setMailJugable(turnos[1]);
+  } else {
+    setMailJugable(turnos[index + 1]);
+  }
+  //setTemporizador(true);
+});
 
   socket.on("salaLlena", (data)=>{
     setReady(data.ready);
@@ -83,9 +85,10 @@ useEffect(() => {
     setCartas(data.cartasRestantes)
   })
 
-  socket.on("ordenTurnos", (data)=>{
-    setTurnos(data)
-  })
+  socket.on("ordenTurnos", (data) => {
+    console.log("Turnos recibidos:", data.turnos);
+    setTurnos(data.turnos); // ✅ Acceder a data.turnos
+  });
 
   socket.on("levantar", (data)=>{
     setCartas(data.cartasRestantes)
@@ -401,18 +404,20 @@ useEffect(()=>{
     if(turnos[limite]=== mailUser){
       let pepe = getRandomInt(mazo.length - 1);
       console.log("pepe: ", pepe)
-      console.log(mazo[1].cod_carta)
-      setCartaActual(mazo[pepe].cod_carta);
-      setColorCartaActual(mazo[pepe].color);
-      setValorCartaActual(mazo[pepe].valor);
-      socket.emit("cartaCentral", {cod: cartaActual, color: colorCartaActual, valor: valorCartaActual})
+      let codigo = mazo[pepe].cod_carta;
+      let color = mazo[pepe].color;
+      let valor = mazo[pepe].valor;
+      socket.emit("cartaCentral", {cod: codigo, color: color, valor: valor})
+      setCartaActual(codigo);
+      setColorCartaActual(color);
+      setValorCartaActual(valor);
     }else{
-      let index = turnos.indexOf(mail);
+      let index = turnos.indexOf(mailUser);
       if(index != 3){ 
-        setMailJugable(turnos[index+1])
-        socket.emit("repartirSigueinte", {siguiente: mailJugable})
+        const siguiente = turnos[index + 1];
+        setMailJugable(siguiente);
+        socket.emit("repartirSiguiente", { siguiente: siguiente });
       }
-      
     }
   }
 
@@ -448,7 +453,7 @@ useEffect(()=>{
       <Carta
         className={styles.cartaActual}
             id={cartaActual}
-            img={ImagenCartaActual}
+            src={ImagenCartaActual}
       ></Carta>
       <Button
         className={styles.mazo}
@@ -476,13 +481,13 @@ useEffect(()=>{
               className={styles.turno}
               id={carta.cod_carta}
               onClick={() => selectCarta(carta.cod_carta)}
-              img={carta.imagen}
+              src={carta.imagen}
             />
             :
             <Carta
               className={styles.noTurno}
               id={carta.cod_carta}
-              img={carta.imagen}
+              src={carta.imagen}
             />
         ))}
       </div>
