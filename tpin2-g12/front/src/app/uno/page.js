@@ -20,6 +20,7 @@ export default function UNO() {
   const [turnos, setTurnos] = useState([]);
   const [cartaActual, setCartaActual] = useState("");
   const [cartaPrevia, setCartaPrevia] = useState("");
+  const [cartaJugada, setCartaJugada] = useState("");
   const [mailPrevio, setMailPrevio] = useState("");
   const [mailJugable, setMailJugable] = useState("");
   const [colorCartaActual, setColorCartaActual] = useState("");
@@ -158,14 +159,22 @@ export default function UNO() {
   }, [temporizador]);*/
 
 
-  useEffect(() => {
+  /*useEffect(() => {
     console.log(cartas);
     if (cartas.length == 0)
       return;
+    
+    console.log("CARTAS: ", cartas)
+    console.log("COD CARTAS: ", cartas.cod_carta)
 
-    let index = cartas.findIndex(x => x.cod_carta === cartaActual)
+    let codigo = cartas.cod_carta
+    console.log(cartaActual)
+    let index = codigo.indexOf(cartaActual) //cartas.findIndex(x => x.cod_carta === cartaActual)
+    console.log(cartas)
     setImagenCartaActual(cartas[index].imagen)
   }, [cartaActual]);
+  Descomentar para probar la pagina
+  */
 
   useEffect(() => {
     if (!socket) {
@@ -251,10 +260,10 @@ export default function UNO() {
         .then(result => {
           console.log(result)
           if (result.validar == true) {
-            setColorCartaActual(result.carta[0].color)
-            console.log(colorCartaJugada)
-            setValorCartaActual(result.carta[0].valor)
-            console.log(valorCartaJugada)
+            setCartaPrevia(cartaActual);
+            setCartaJugada(result.carta[0].cod_carta)
+            setColorCartaJugada(result.carta[0].color)
+            setValorCartaJugada(result.carta[0].valor)
             return;
           } else {
             return alert("La Cagaste")
@@ -308,12 +317,10 @@ export default function UNO() {
 
   function Jogar(carta) {
     console.log("seba calmate")
-    if (colorCartaActual == colorCartaJugada || valorCartaActual == valorCartaJugada || valorCartaJugada == "Color" || valorCartaJugada == "+4") {
+    if (colorCartaActual === colorCartaJugada || valorCartaActual === valorCartaJugada || valorCartaJugada === "Color" || valorCartaJugada === "+4") {
       if (cartaPrevia != "") {
         cartas.push(cartaPrevia)
       }
-      setCartaPrevia(cartaActual);
-      setCartaActual(carta);
       if (valorCartaJugada == "Cambio") {
         turnos.reverse();
         //socket.emit("turnos", turnos);
@@ -415,8 +422,7 @@ export default function UNO() {
     console.log("peponsio: ", cartas)
     socket.emit("enviar_cartas", { room: id_Mesa, cartas: mazo });
     socket.emit("jugadorActual", mailUser);
-    if (turnos) {
-      if (orden[limite] === mailUser) {
+      if (orden[limite-1] === mailUser) {
         let pepe = getRandomInt(mazo.length - 1);
         console.log("pepe: ", pepe)
         let codigo = mazo[pepe].cod_carta;
@@ -437,8 +443,6 @@ export default function UNO() {
           socket.emit("repartirSiguiente", { baraja: mazo, orden: orden, siguiente: siguiente });
         }
       }
-
-    }
 
   }
 
@@ -518,7 +522,7 @@ export default function UNO() {
           <Button
             className={styles.Jugar}
             text={"Jugar Carta"}
-            onClick={Jogar}
+            onClick={()=>Jogar(cartaJugada)}
           ></Button>
           :
           <Button
