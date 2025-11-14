@@ -48,12 +48,14 @@ io.use((socket, next) => {
 });
 
 
-const datosRooms = {} 
+let datosRooms = {}
+
 
 
 io.on("connection", (socket) => {
     const req = socket.request;
     socket.on('joinRoom', data => {
+        const idRoom = data.room
         console.log("JoinRoom: ", data)
         req.session.room = data.room;
         req.session.mail = data.mail;
@@ -66,14 +68,18 @@ io.on("connection", (socket) => {
         }
         socket.join(req.session.room);
         io.to(req.session.room).emit('joinedRoom', { mail: req.session.mail, room: req.session.room });
-        if (!datosRooms[data.room]) {
-            datosRooms[data.room] = { contador: 0 };
+        if (!datosRooms[idRoom]) {
+            datosRooms[idRoom] = {contador:0, trunos: []}
+
         }
-        console.log("arranca asi:", datosRooms[data.room].contador)
-        datosRooms[data.room].contador++;
-        console.log("setea esto:", datosRooms[data.room].contador)
-        if(datosRooms[data.room].contador == req.session.maximo){
-            io.to(req.session.room).emit('salaLlena', { ready: true, room: req.session.room }, console.log("Sala LLena"));
+        console.log("arranca asi en contador:", datosRooms[idRoom].contador)
+        console.log("arranca asi en trunos:", datosRooms[idRoom].trunos)
+        datosRooms[idRoom].contador++;
+        datosRooms[idRoom].trunos.push(data.mail);
+        console.log("setea esto en contador:", datosRooms[data.room].contador)
+        console.log("setea esto en trunos:", datosRooms[data.room].trunos)
+        if(datosRooms[idRoom].contador == req.session.maximo){
+            io.to(req.session.room).emit('salaLlena', { ready: true, turnos: datosRooms[idRoom].trunos, room: req.session.room });
         }
 
         socket.on('pingAll', data => {
@@ -166,6 +172,17 @@ io.on("connection", (socket) => {
             color: data.color,
             valor: data.valor
         });
+    });
+
+    socket.on("repartirSiguiente", (data) => {
+        console.log("datafono: ",data)
+        io.to(req.session.room).emit("reparto", {
+            room: req.session.room,
+            mail: data.siguiente,
+            orden: data.orden,
+            baraja: data.baraja
+            
+        }, console.log("Se repartio a uno"));
     });
 });
 
