@@ -131,8 +131,11 @@ io.on("connection", (socket) => {
     socket.on("jugadorActual", (data) => {
         io.to(req.session.room).emit("jugadorAnterior", {
             room: req.session.room,
-            mailJugado: data,
+            mailJugado: data.mail,
+            turnos: data.orden,
+            
         });
+        console.log("Villereada: ", data)
     });
 
     socket.on("turnos", (data) => {

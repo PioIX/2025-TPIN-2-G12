@@ -62,21 +62,28 @@ export default function UNO() {
 
     socket.on('jugadorAnterior', (data) => {
       setMailPrevio(data.mailJugado);
-      let index = turnos.findIndex(x => x === mailUser);
-      if (index == 3) {
-        setMailJugable(turnos[1]);
-      } else {
-        setMailJugable(turnos[index + 1]);
+      console.log(data.turnos)
+      let turnitos = [];
+      turnitos= data.turnos;
+      console.log(turnitos)
+      if (turnitos){
+        let index = turnitos.indexOf(data.mailJugado);
+        console.log(turnitos)
+        console.log(index)
+        if (index == limite-1) {
+          setMailJugable(turnos[1]);
+          console.log("NO me digas que hacer")  
+        } else {
+          setMailJugable(turnos[index + 1]);
+          console.log("Anda a cagar")
+        }
+        //setTemporizador(true);
       }
-      //setTemporizador(true);
     });
 
     socket.on("salaLlena", (data) => {
       console.log("Turnos recibidos:", data.turnos);
-      console.log("Mati volve");
       setTurnos(data.turnos);
-      console.log("Data.ordenanza: ", data.turnos)
-      console.log("Ordenanza: ", turnos)
       if (turnos) {
         const ejecutar = async () => {
           try {
@@ -421,7 +428,7 @@ export default function UNO() {
     console.log("manito: ", mano)
     console.log("peponsio: ", cartas)
     socket.emit("enviar_cartas", { room: id_Mesa, cartas: mazo });
-    socket.emit("jugadorActual", mailUser);
+    socket.emit("jugadorActual",{orden: orden, mail:mailUser});
       if (orden[limite-1] === mailUser) {
         let pepe = getRandomInt(mazo.length - 1);
         console.log("pepe: ", pepe)
