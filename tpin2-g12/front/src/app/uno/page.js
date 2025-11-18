@@ -71,7 +71,7 @@ export default function UNO() {
         console.log(turnitos)
         console.log(index)
         if (index == limite-1) {
-          setMailJugable(turnos[1]);
+          setMailJugable(turnos[0]);
           console.log("NO me digas que hacer")  
         } else {
           setMailJugable(turnos[index + 1]);
@@ -83,7 +83,11 @@ export default function UNO() {
 
     socket.on("salaLlena", (data) => {
       console.log("Turnos recibidos:", data.turnos);
-      setTurnos(data.turnos);
+      const cambioTurnos = data.turnos.map(truno => 
+        {if(truno){
+          return truno;
+        }} )
+      setTurnos(cambioTurnos);
       if (turnos) {
         const ejecutar = async () => {
           try {
@@ -134,6 +138,7 @@ export default function UNO() {
       if (data.mail === mailUser) {
         console.log("Cartiñas: ", data.baraja)
         console.log("Olden: ", data.orden)
+        console.log(turnos)
         if (turnos) {
           repartija(data.baraja, data.orden)
 
@@ -426,7 +431,7 @@ export default function UNO() {
       }
     }
     console.log("manito: ", mano)
-    console.log("peponsio: ", cartas)
+    console.log("peponsio: ", mazo)
     socket.emit("enviar_cartas", { room: id_Mesa, cartas: mazo });
     socket.emit("jugadorActual",{orden: orden, mail:mailUser});
       if (orden[limite-1] === mailUser) {
@@ -443,7 +448,7 @@ export default function UNO() {
         console.log("trunos: ", orden)
         let index = orden.indexOf(mailUser);
         console.log("indicatro: ", index)
-        if (index != 3) {
+        if (index != limite-1) {
           let siguiente = orden[index + 1];
           setMailJugable(siguiente);
           console.log("el que sigue: ", siguiente)
