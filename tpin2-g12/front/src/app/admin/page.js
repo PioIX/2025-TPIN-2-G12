@@ -225,7 +225,7 @@ export default function admin(){
                     onChange6={corrobaoMesa2}
 
                     text3="Cambiar estado mesa"
-                    onClick3={actMesa}
+                    //onClick3={actMesa}//
                 ></FormA>
             </div>
             <br></br>
