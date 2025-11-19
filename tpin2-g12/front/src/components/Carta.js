@@ -2,8 +2,8 @@
 
 export default function Carta(props){
   return(
-    <div className={props.styles} id={props.id} onClick={props.onClick}>
-      <img src={props.carta}></img>
+    <div className={props.className} id={props.id} onClick={props.onClick}>
+      <img src={props.src} alt={props.valor} />
     </div>
   )
 }
