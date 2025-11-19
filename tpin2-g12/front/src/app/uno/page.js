@@ -63,19 +63,14 @@ export default function UNO() {
     socket.on('jugadorAnterior', (data) => {
       setMailPrevio(data.mailJugado);
       console.log(data.turnos)
-      let turnitos = [];
-      turnitos= data.turnos;
-      console.log(turnitos)
-      if (turnitos){
-        let index = turnitos.indexOf(data.mailJugado);
-        console.log(turnitos)
-        console.log(index)
-        if (index == limite-1) {
-          setMailJugable(turnos[0]);
-          console.log("NO me digas que hacer")  
+      if (data.turnos && data.turnos.length > 0) {
+        const index = data.turnos.indexOf(data.mailJugado);
+        if (index === limite - 1) {
+          setMailJugable(data.turnos[0]);
+          console.log("Turno 0")
         } else {
-          setMailJugable(turnos[index + 1]);
-          console.log("Anda a cagar")
+          setMailJugable(data.turnos[index + 1]);
+          console.log("Turno 1 o +")
         }
         //setTemporizador(true);
       }
@@ -259,7 +254,7 @@ export default function UNO() {
   };
 
   function traerCartaJugada(datos) {
-    if (id != "") {
+    if (datos.id != "") {
       fetch("http://localhost:4000/traerCartaJugada",
         {
           method: "POST",
@@ -336,37 +331,37 @@ export default function UNO() {
       if (valorCartaJugada == "Cambio") {
         turnos.reverse();
         //socket.emit("turnos", turnos);
-        socket.emit("jugadorActual", { mailJugado: mailUser })
+        socket.emit("jugadorActual", { mailJugado: mailUser, orden: turnos })
       }
       if (valorCartaJugada == "Bloqueo") {
-        let index = turnos.findIndex(x => x.concepto === mailUser)
+        let index = turnos.indexOf(mailUser)
         if (index = 3) {
           setMailPrevio(turnos[1])
         } else { setMailPrevio(turnos[index + 1]) }
-        socket.emit("jugadorActual", turnos[index])
+        socket.emit("jugadorActual", {mailJugado: turnos[index], orden: turnos})
       }
       if (valorCartaJugada == "+2") {
-        let index = turnos.findIndex(x => x.concepto === mailUser)
+        let index = turnos.indexOf(mailUser)
         if (index = 3) {
           setMailJugable(turnos[1])
         } else { setMailJugable(turnos[index + 1]) }
         socket.emit("aLevantar", { cartasRestantes: cartas, mailJugable: turnos[index], cant: 2 })
-        socket.emit("jugadorActual", { mailJugado: turnos[index] })
+        socket.emit("jugadorActual", {mailJugado: turnos[index], orden: turnos})
       }
       if (valorCartaJugada == "Color") {
         setShowColor(true);
 
-        socket.emit("jugadorActual", { mailJugado: mailUser })
+        socket.emit("jugadorActual", {mailJugado: turnos[index], orden: turnos})
       }
       if (valorCartaJugada == "+4") {
         setShowColor(true);
         if (showColor) {
-          let index = turnos.findIndex(x => x.concepto === mailUser)
+          let index = turnos.indexOf(mailUser)
           if (index = 3) {
             setMailJugable(turnos[0])
           } else { setMailJugable(turnos[index + 1]) }
           socket.emit("aLevantar", { cartasRestantes: cartas, mailJugable: turnos[index], cant: 4 })
-          socket.emit("jugadorActual", { mailJugado: turnos[index] })
+          socket.emit("jugadorActual", {mailJugado: turnos[index], orden: turnos})
         }
       }
       if (mano.length == 1 && ultima == false) {
@@ -483,6 +478,10 @@ export default function UNO() {
     router.push("../mesas")
   }
 
+  function sarakatunga(){
+    console.log("ererrerrerr")
+  }
+
   // Lo que se muestra en Pantalla
   return (
     <>
@@ -512,23 +511,16 @@ export default function UNO() {
         </div>
         <Timer></Timer>
         <div className="mano">
-          {(mano.length != 0) && mano.map((carta) => (
-            mailUser == mailJugable ?
+          {(mano.length != 0) && mano.map((carta, index) => (
+            
               <Carta
-                key={carta.cod_carta}
-                className={styles.turno}
+                key={index}
+                className={mailUser == mailJugable ? styles.turno: styles.noTurno}
                 id={carta.cod_carta}
-                onClick={() => selectCarta(carta.cod_carta)}
+                onClick={mailUser == mailJugable ? () => selectCarta(carta.cod_carta): sarakatunga()}
                 src={carta.imagen}
-              />
-              :
-              <Carta
-                key={carta.cod_carta}
-                className={styles.noTurno}
-                id={carta.cod_carta}
-                src={carta.imagen}
-              />
-          ))}
+              ></Carta>
+            ))}
         </div>
         {valorCartaJugada == valorCartaActual || colorCartaActual == colorCartaJugada || valorCartaJugada == "Color" || valorCartaJugada == "+4" ?
           <Button
