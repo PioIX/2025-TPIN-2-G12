@@ -14,7 +14,7 @@ export default function Mesas(){
     const [ID_Mesa, setID_Mesa] = useState("");
     const [mailOwner, setMailOwner] = useState("");
     const [limite, setLimite] = useState(0);
-    const [showModal, setShowModal] = useState(false);
+    const [mostrarModal, setMostrarModal] = useState(false);
     
     /*useEffect(()=>{
       traerMesas()
@@ -41,9 +41,6 @@ export default function Mesas(){
         )
       }
       
-      function errao(){
-          alert("Mesa Deshabiltada por el Momento")
-      }
       function moverU(){
           router.push(`../uno?limite=${limite}&id_mesa=${ID_Mesa}&mailOwner=${mailOwner}`)
       }
@@ -124,16 +121,19 @@ export default function Mesas(){
           ></Button>
         </div>
         {showModal &&
-          <FormUnion
-            h2={"Ingrese el ID de la mesa"}
-            classNameI={styles.Input}
-            type={"text"}
-            onChange={corrobao}
-            value={ID_Mesa}
-            classNameB={styles.Button}
-            onClick={Unirse}
-            text={"Unirse a la Mesa"}
-          ></FormUnion>
+          <div className={styles.divModal}>
+            <FormUnion
+              h2={"Ingrese el ID de la mesa"}
+              classNameH2={styles.h2}
+              classNameI={styles.Input}
+              type={"text"}
+              onChange={corrobao}
+              value={ID_Mesa}
+              classNameB={styles.Button}
+              onClick={UnirseMesa}
+              text={"Unirse a la Mesa"}
+            ></FormUnion>
+          </div>
         }
   </>
   )

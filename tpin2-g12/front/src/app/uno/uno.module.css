@@ -37,3 +37,19 @@
     border: solid #ffffff;
     color: #ffffff;
 }
+
+.habilitarUno {
+    display: block;
+}
+
+.deshabilitarUno {
+    display: none;
+}
+
+.turno {
+    opacity: 100%;
+}
+
+.noTurno {
+    opacity: 50%;
+}
