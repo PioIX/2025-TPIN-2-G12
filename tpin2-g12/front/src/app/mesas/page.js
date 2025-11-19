@@ -12,6 +12,7 @@ export default function Mesas(){
     const router = useRouter();
     const [estadoMesa, setEstadoMesa] = useState("");
     const [ID_Mesa, setID_Mesa] = useState("");
+    const [mailOwner, setMailOwner] = useState("");
     const [limite, setLimite] = useState(0);
     const [mostrarModal, setMostrarModal] = useState(false);
     
@@ -41,10 +42,10 @@ export default function Mesas(){
       }
       
       function moverU(){
-          router.push(`../uno?limite=${limite}`)
+          router.push(`../uno?limite=${limite}&id_mesa=${ID_Mesa}&mailOwner=${mailOwner}`)
       }
       function moverB(){
-          router.push(`../blackjack?limite=${limite}`)
+          router.push(`../blackjack?limite=${limite}&id_mesa=${ID_Mesa}&mailOwner=${mailOwner}`)
       }
   
       function moverC(){
@@ -55,33 +56,45 @@ export default function Mesas(){
         router.push("../login")
     }
 
-      function UnirseMesa(){
+      function UnirseMesa(datos){
+        console.log(datos)
         fetch("http://localhost:4000/existeMesa",
         {
           method:"POST", 
           headers: {
             "Content-Type": "application/json",
           },
-          //body: JSON.stringify(datos)
+          body: JSON.stringify(datos)
         })
         .then(response => response.json())
         .then(result =>{
           console.log(result)
           if (result.validar == true){
-            console.log(result.estado)
             setLimite(result.limite)
             setEstadoMesa(result.estado)
+            setMailOwner(result.owner)
+            console.log(result.estado)
           } else {
             return alert("La Cagaste")
           }}
         )
-        if(estadoMesa=="UNO"){
+        if(estadoMesa=="uno"){
           moverU()
-        }else if(estadoMesa=="Blackjack"){
+        }else if(estadoMesa=="blackjack"){
           moverB()
         }else{
           <Modal mensaje={"Mesa Inexistente o Deshabilitada"}></Modal>
         }
+      }
+
+      function Unirse() {
+        if(ID_Mesa == undefined){
+            return alert("Error, faltan datos")
+        }
+        let datos = {
+            num_mesa: ID_Mesa,
+        }
+        UnirseMesa(datos)
       }
 
       function corrobao(event){
@@ -93,7 +106,7 @@ export default function Mesas(){
         <div className={styles.Div}>
           <Button
             className={styles.Crear}
-            onClick={()=> setMostrarModal(true)}
+            onClick={() => setShowModal(true)}
             text={"Unirse a la Mesa"}
           ></Button>
           <Button
@@ -107,7 +120,7 @@ export default function Mesas(){
             text={"Cerrar Sesión"}
           ></Button>
         </div>
-        {mostrarModal == true &&
+        {showModal &&
           <div className={styles.divModal}>
             <FormUnion
               h2={"Ingrese el ID de la mesa"}

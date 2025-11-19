@@ -13,7 +13,7 @@ export default function Laboratorio(){
     const [limite, setLimite] = useState("")
     const [limit, setLimit] = useState("")
     const router = useRouter()
-    const loguedUser = localStorage.getItem("loguedUser")
+    const mailUser = localStorage.getItem("loguedUser")
 
     function corrobao1(event){
         setCodigoMesa(event.target.value)
@@ -31,10 +31,11 @@ export default function Laboratorio(){
     }
 
     function moverMesa(){
-        if(modo.toLowerCase == "uno"){
-            router.replace(`../uno?limite=${limit}`)
-        } else if(modo.toLowerCase == "blackjack"){
-            router.replace(`../blackjack?limite=${limit}`)
+        console.log(limite)
+        if(modo.toLowerCase() == "uno"){
+            router.replace(`../uno?limite=${limite}&id_mesa=${codigoMesa}&mailOwner=${mailUser}`)
+        } else if(modo.toLowerCase() == "blackjack"){
+            router.replace(`../blackjack?limite=${limite}&id_mesa=${codigoMesa}&mailOwner=${mailUser}`)
         } else {alert("Modo inexistente, los modos son Uno o Blackjack")}
     }
     function volver(){
@@ -42,7 +43,7 @@ export default function Laboratorio(){
     }
 
     function crearMesa(datos){
-        if(codigoMesa != "" || modo != "" || limite != "" || loguedUser != ""){
+        if(codigoMesa != "" || modo != "" || limite != "" || mailUser != ""){
             fetch("http://localhost:4000/crearMesa",
             {
                 method:"POST", 
@@ -55,25 +56,26 @@ export default function Laboratorio(){
             .then(result =>{
                 console.log(result)
                 if (result.validar == true){
-                    console.log(result.code[0])
-                    setLimit(result.code[0])
+                    console.log(result.limit)
+                    setLimit(result.limit)
                 } else {
                     return alert("La Cagaste")
                 }}
             )
+            .then(moverMesa())
         }
-        moverMesa()
     }
 
     function creoMesa() {
-    if(codigoMesa == undefined || modo == undefined || limite == undefined || loguedUser == undefined){
+    if(codigoMesa == undefined || modo == undefined || limite == undefined || mailUser == undefined){
         return alert("Error, faltan datos")
     }
+    let a = modo.toLowerCase()
     let datos = {
         num_mesa: codigoMesa,
-        estado: modo,
+        estado: a,
         limite_max: limite,
-        id_owner: loguedUser 
+        id_owner: mailUser 
     }
     crearMesa(datos)}
 

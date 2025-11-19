@@ -41,8 +41,8 @@ export default function Login(){
             .then(result =>{
                 console.log(result)
                 if (result.validar == true){
-                    console.log(result.log[0])
-                    localStorage.setItem("loguedUser", result.log[0])
+                    console.log(result.log)
+                    localStorage.setItem("loguedUser", result.log)
                     router.replace("../mesas")
                 } else {
                     return alert("La Cagaste")
