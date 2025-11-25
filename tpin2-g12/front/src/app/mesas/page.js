@@ -14,7 +14,7 @@ export default function Mesas(){
     const [ID_Mesa, setID_Mesa] = useState("");
     const [mailOwner, setMailOwner] = useState("");
     const [limite, setLimite] = useState(0);
-    const [mostrarModal, setMostrarModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     
     /*useEffect(()=>{
       traerMesas()
@@ -130,7 +130,7 @@ export default function Mesas(){
               onChange={corrobao}
               value={ID_Mesa}
               classNameB={styles.Button}
-              onClick={UnirseMesa}
+              onClick={Unirse}
               text={"Unirse a la Mesa"}
             ></FormUnion>
           </div>

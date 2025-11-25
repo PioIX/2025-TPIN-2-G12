@@ -153,9 +153,7 @@ export default function UNO() {
   }, [turnos])
 
   useEffect(() => {
-
     console.log("cartas state: ", cartas)
-
   }, [cartas])
 
 
